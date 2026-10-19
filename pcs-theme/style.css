@@ -239,7 +239,7 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .menu-btn{display:block;order:0}
  .logo{order:1;font-size:1.25rem}
  .logo img{height:64px}
- .hd-actions{order:2}
+ .hd-actions{order:2;margin-left:auto}
  .hd-actions span{display:none}
  .hd-search{order:3;flex:1 1 100%;max-width:none;margin-left:0}
  .nav{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;flex-direction:column;gap:0;padding:4px 16px 8px;border-bottom:1px solid var(--line);z-index:25}
