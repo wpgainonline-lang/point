@@ -20,4 +20,21 @@
 		</div>
 	</div>
 </div>
+<?php
+$rel_ids = array();
+if ( $terms && ! is_wp_error( $terms ) ) {
+	$rel_ids = get_posts( array( 'post_type' => 'product', 'numberposts' => 10, 'post__not_in' => array( $id ), 'fields' => 'ids', 'orderby' => 'menu_order title', 'order' => 'ASC', 'tax_query' => array( array( 'taxonomy' => 'product_cat', 'terms' => wp_list_pluck( $terms, 'term_id' ) ) ) ) );
+}
+if ( count( $rel_ids ) < 4 ) {
+	$rel_ids = array_unique( array_merge( $rel_ids, get_posts( array( 'post_type' => 'product', 'numberposts' => 8, 'post__not_in' => array_merge( array( $id ), $rel_ids ), 'fields' => 'ids', 'orderby' => 'menu_order title', 'order' => 'ASC' ) ) ) );
+}
+if ( $rel_ids ) : ?>
+<section class="section"><div class="wrap">
+	<div class="section-head"><h2>More like this</h2><a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">View all</a></div>
+	<div class="car" data-car>
+		<div class="car-track" tabindex="0"><?php foreach ( $rel_ids as $rid ) { echo pcs_card( $rid ); } // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+		<button type="button" class="sl-btn sl-prev" aria-label="Previous">‹</button><button type="button" class="sl-btn sl-next" aria-label="Next">›</button>
+	</div>
+</div></section>
+<?php endif; ?>
 <?php get_footer(); ?>

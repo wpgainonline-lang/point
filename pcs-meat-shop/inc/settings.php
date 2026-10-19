@@ -26,6 +26,7 @@ function pcs_defaults() {
 		'banners'       => '',
 		'usps'          => "Fresh & chilled|Never frozen, kept cold from cut to doorstep\nHygienic cuts|Cleaned, cut and packed in a hygienic counter\nCut your way|Curry, biryani, boneless and more\nChennai delivery|Pick a slot that suits you",
 		'offer'         => '',
+		'testimonials'  => "Arun Kumar|Chennai|Really impressed with the quality from House of Cutts. The meat was fresh and juicy, and the cuts were exactly as requested. Packaging was neat and secure, which made the whole order feel very hygienic and premium. Definitely ordering again.\nSuresh Reddy|Chennai|Excellent meat quality. The cuts were fresh, tender and nicely prepared. I really liked the packaging because everything arrived clean and properly packed. The pieces were also cut to the right size for cooking. Very good experience.\nPriya Sharma|Chennai|Loved the chicken quality. The pieces were fresh, juicy and properly cleaned. The boneless cuts were evenly prepared, which made cooking much easier. Packaging was also very neat with no unnecessary mess. House of Cutts is now my go-to.\nMohammed Imran|Chennai|Very happy with the cutting quality. The curry pieces were perfectly sized and the meat was fresh and juicy. Everything was packed properly and looked hygienic. The staff also understood my cutting requirement perfectly. Great service overall.\nRahul Verma|Chennai|Fresh meat, clean cutting and really good packaging. The pieces looked fresh and had a great texture. I also liked that there was very little unnecessary waste. Everything was prepared with care. Highly recommended for anyone looking for quality cuts.\nKarthik Raj|Chennai|One of the better meat shopping experiences I have had in Chennai. The cuts were fresh, juicy and prepared exactly as requested. The quantity was properly packed and the packaging looked clean and professional. Will definitely order from House of Cutts again.",
 	);
 }
 
@@ -99,6 +100,7 @@ function pcs_fields() {
 		'Home page'     => array(
 			'banners' => array( 'Banners', 'textarea', 'One per line: image URL|Title|Subtitle|Link' ),
 			'usps'    => array( 'Highlights strip', 'textarea', 'One per line: Title|Text' ),
+			'testimonials' => array( 'Customer reviews', 'textarea', 'One per line: Name|City|Review text. Shown as a carousel on the home page.' ),
 		),
 		'Offers'        => array(
 			'offer' => array( 'Offer bar text', 'text', 'Shown as a red bar on the home page. Create the coupon itself under Marketing → Coupons. Leave empty to hide.' ),

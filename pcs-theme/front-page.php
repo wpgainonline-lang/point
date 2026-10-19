@@ -92,12 +92,31 @@ $offer   = pcs_opt( 'offer' );
 	</div>
 </div></section>
 
+<?php $revs = pcs_lines( 'testimonials' ); if ( $revs ) : ?>
+<section class="section"><div class="wrap">
+	<div class="section-head"><h2>What our customers say</h2></div>
+	<div class="car car-rev" data-car>
+		<div class="car-track" tabindex="0">
+			<?php foreach ( $revs as $r ) : ?>
+			<figure class="rcard">
+				<div class="rtop"><span class="av" aria-hidden="true"><?php echo esc_html( mb_strtoupper( mb_substr( $r[0], 0, 1 ) ) ); ?></span><span><strong><?php echo esc_html( $r[0] ); ?></strong><br><span class="muted"><?php echo esc_html( $r[1] ?? '' ); ?></span></span></div>
+				<div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
+				<blockquote><?php echo esc_html( $r[2] ?? '' ); ?></blockquote>
+				<p class="ver"><?php echo pcs_icon( 'shield' ); // phpcs:ignore ?> Verified customer</p>
+			</figure>
+			<?php endforeach; ?>
+		</div>
+		<button type="button" class="sl-btn sl-prev" aria-label="Previous">‹</button><button type="button" class="sl-btn sl-next" aria-label="Next">›</button>
+	</div>
+</div></section>
+<?php endif; ?>
+
 <section class="section soft"><div class="wrap split faq-wrap">
 	<div><span class="kicker">Questions</span><h2>Good to know</h2><p>Still unsure? Call us on <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) ) ); ?>"><strong><?php echo esc_html( pcs_opt( 'phone' ) ); ?></strong></a>.</p></div>
 	<div class="faq">
 		<details><summary>Where do you deliver?</summary><p>We currently deliver in <?php echo esc_html( pcs_opt( 'city' ) ); ?>. Enter your pincode on this page to check. More cities are coming soon.</p></details>
 		<details><summary>How do I pay?</summary><p>Cash on delivery for now. Online payment will be added soon.</p></details>
-		<details><summary>What is the minimum order and delivery charge?</summary><p>Minimum order is <?php echo esc_html( pcs_money( pcs_opt( 'min_order', 0 ) ) ); ?>. Delivery is <?php echo esc_html( pcs_money( pcs_opt( 'delivery_fee', 0 ) ) ); ?><?php echo (float) pcs_opt( 'free_above', 0 ) > 0 ? ', and free above ' . esc_html( pcs_money( pcs_opt( 'free_above' ) ) ) : ''; ?>.</p></details>
+		<details><summary>What is the delivery charge?</summary><p>Delivery is <?php echo esc_html( pcs_money( pcs_opt( 'delivery_fee', 0 ) ) ); ?><?php echo (float) pcs_opt( 'free_above', 0 ) > 0 ? ', and free above ' . esc_html( pcs_money( pcs_opt( 'free_above' ) ) ) : ''; ?>.<?php echo (float) pcs_opt( 'min_order', 0 ) > 0 ? ' Minimum order is ' . esc_html( pcs_money( pcs_opt( 'min_order' ) ) ) . '.' : ''; ?></p></details>
 		<details><summary>Can I choose how the meat is cut?</summary><p>Yes. Pick the cut you want, such as curry cut, biryani cut or boneless. For special requests, add a note at checkout.</p></details>
 		<details><summary>Can I visit the shop?</summary><p>Yes, you are welcome. We are at <?php echo esc_html( str_replace( "\n", ', ', pcs_opt( 'address' ) ) ); ?>.</p></details>
 	</div>

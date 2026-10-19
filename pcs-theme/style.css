@@ -149,6 +149,19 @@ body.lock{overflow:hidden}
 .car .sl-prev{left:-14px}.car .sl-next{right:-14px}
 .car .sl-btn[disabled]{opacity:.35;cursor:default}
 
+/* reviews */
+.car-rev .car-track{gap:16px}
+.rcard{flex:0 0 calc((100% - 32px)/3);scroll-snap-align:start;margin:0;border:1px solid var(--line);background:#fff;padding:20px 28px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.rtop{display:flex;gap:12px;align-items:center}
+.rtop .muted{font-size:.85rem}
+.av{width:44px;height:44px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;flex:none}
+.stars{color:#e8a200;letter-spacing:2px;font-size:1.05rem}
+.rcard blockquote{margin:0;color:#333;flex:1;font-size:.95rem;line-height:1.55}
+.ver{margin:0;color:var(--ok);font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.ver .ic{width:16px;height:16px}
+.car-rev .sl-btn{top:42%;width:34px}
+.car-rev .sl-prev{left:-8px}.car-rev .sl-next{right:-8px}
+
 /* product grid & cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
 .card{border:1px solid var(--line);background:#fff;display:flex;flex-direction:column}
@@ -257,8 +270,8 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .mbar .cart-count{position:absolute;top:2px;left:55%}
  #pcs-toast{bottom:72px;width:calc(100% - 32px);text-align:center}
 }
-@media(max-width:900px){.car-track .card{flex-basis:calc((100% - 14px)/2.3)}.car .sl-prev{left:0}.car .sl-next{right:0}}
-@media(max-width:520px){.ft{grid-template-columns:1fr}.hero2-pics{gap:6px}}
+@media(max-width:900px){.rcard{flex-basis:calc((100% - 16px)/1.6)}.car-track .card{flex-basis:calc((100% - 14px)/2.3)}.car .sl-prev{left:0}.car .sl-next{right:0}}
+@media(max-width:520px){.rcard{flex-basis:86%}.ft{grid-template-columns:1fr}.hero2-pics{gap:6px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
 /* WooCommerce pages: flat, light */
