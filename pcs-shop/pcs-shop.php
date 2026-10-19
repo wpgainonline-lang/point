@@ -29,7 +29,7 @@ register_activation_hook( __FILE__, function () {
 } );
 
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_script( 'pcs-shop', PCS_URL . 'assets/shop.js', array(), PCS_VERSION, true );
+	wp_enqueue_script( 'pcs-shop', PCS_URL . 'assets/shop.js', array(), (string) filemtime( PCS_DIR . 'assets/shop.js' ), true );
 	wp_localize_script( 'pcs-shop', 'PCS', array(
 		'api'      => esc_url_raw( rest_url( 'pcs/v1/' ) ),
 		'nonce'    => wp_create_nonce( 'wp_rest' ),
@@ -40,4 +40,15 @@ add_action( 'wp_enqueue_scripts', function () {
 		'slots'    => pcs_slots_for_days(),
 		'currency' => '₹',
 	) );
+} );
+
+// Cart, checkout and account pages are personal: never serve them from a page cache.
+add_action( 'template_redirect', function () {
+	if ( is_page( array( 'checkout', 'account' ) ) ) {
+		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			define( 'DONOTCACHEPAGE', true );
+		}
+		do_action( 'litespeed_control_set_nocache', 'pcs personal page' );
+		nocache_headers();
+	}
 } );

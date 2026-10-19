@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Primecutss MCP
  * Description: Exposes an MCP (Model Context Protocol) endpoint so an AI assistant can manage this WordPress site: content, menus, CSS, options, plugins, themes and files.
- * Version: 0.2.0
+ * Version: 0.3.0
  * Requires PHP: 7.4
  */
 
@@ -70,7 +70,7 @@ final class Primecutss_MCP {
 				return self::rpc_result( $id, array(
 					'protocolVersion' => '2025-03-26',
 					'capabilities'    => array( 'tools' => new stdClass() ),
-					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.2.0' ),
+					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.3.0' ),
 					'instructions'    => 'WordPress site ' . home_url() . '. Tools edit the LIVE site. File paths are relative to wp-content. File writes are backed up; use list_backups/restore_backup to undo.',
 				) );
 			case 'ping':
@@ -319,6 +319,7 @@ final class Primecutss_MCP {
 		} else {
 			deactivate_plugins( $a['plugin'] );
 		}
+		self::purge();
 		return array( 'plugin' => $a['plugin'], 'active' => is_plugin_active( $a['plugin'] ) );
 	}
 
@@ -335,11 +336,12 @@ final class Primecutss_MCP {
 			throw new Exception( 'Theme not found' );
 		}
 		switch_theme( $a['stylesheet'] );
+		self::purge();
 		return array( 'active' => get_stylesheet() );
 	}
 
 	private static function tool_clear_cache( $a ) {
-		wp_cache_flush();
+		self::purge();
 		flush_rewrite_rules();
 		return array( 'ok' => true );
 	}
@@ -376,6 +378,21 @@ final class Primecutss_MCP {
 			throw new Exception( 'Backup directory is off limits.' );
 		}
 		return $must_exist ? $real : $real . '/' . basename( $full );
+	}
+
+	/** Purge page caches (LiteSpeed, WP Rocket, W3TC, WP Super Cache, object cache) after a change. */
+	private static function purge() {
+		wp_cache_flush();
+		do_action( 'litespeed_purge_all' );
+		if ( function_exists( 'rocket_clean_domain' ) ) {
+			rocket_clean_domain();
+		}
+		if ( function_exists( 'w3tc_flush_all' ) ) {
+			w3tc_flush_all();
+		}
+		if ( function_exists( 'wp_cache_clear_cache' ) ) {
+			wp_cache_clear_cache();
+		}
 	}
 
 	private static function backup_dir() {
@@ -454,7 +471,8 @@ final class Primecutss_MCP {
 		if ( false === file_put_contents( $f, $a['content'] ) ) {
 			throw new Exception( 'Write failed' );
 		}
-		return array( 'written' => $a['path'], 'bytes' => strlen( $a['content'] ), 'backup_id' => $bk );
+		self::purge();
+		return array( 'written' => $a['path'], 'bytes' => strlen( $a['content'] ), 'backup_id' => $bk, 'cache_purged' => true );
 	}
 
 	private static function tool_replace_in_file( $a ) {
@@ -470,7 +488,8 @@ final class Primecutss_MCP {
 		}
 		$bk = self::backup( $f );
 		file_put_contents( $f, $new );
-		return array( 'edited' => $a['path'], 'backup_id' => $bk );
+		self::purge();
+		return array( 'edited' => $a['path'], 'backup_id' => $bk, 'cache_purged' => true );
 	}
 
 	private static function tool_list_backups( $a ) {
@@ -492,6 +511,7 @@ final class Primecutss_MCP {
 		$full = self::resolve( $idx[ $id ], false );
 		$bk   = self::backup( $full );
 		copy( $src, $full );
+		self::purge();
 		return array( 'restored' => $idx[ $id ], 'previous_version_backup_id' => $bk );
 	}
 
