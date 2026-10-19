@@ -59,7 +59,7 @@ add_action( 'wp_enqueue_scripts', function () {
 // Old URLs from the first version of the shop.
 add_action( 'template_redirect', function () {
 	$path = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
-	if ( preg_match( '#^shop/(chicken|mutton)$#', $path, $m ) ) {
+	if ( preg_match( '#^(?:shop/)?(chicken|mutton)$#', $path, $m ) ) {
 		$t = get_term_by( 'slug', $m[1], 'product_cat' );
 		if ( $t ) {
 			wp_safe_redirect( get_term_link( $t ), 301 );
@@ -74,7 +74,7 @@ add_action( 'template_redirect', function () {
 		wp_safe_redirect( wc_get_page_permalink( 'myaccount' ), 301 );
 		exit;
 	}
-} );
+}, 1 );
 
 // Keep staff logged-in screens out of reach of customers.
 add_action( 'admin_init', function () {
