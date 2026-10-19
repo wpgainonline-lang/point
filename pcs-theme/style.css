@@ -22,10 +22,10 @@ p{margin:0 0 1em}
 /* top bar + header */
 .ic{width:18px;height:18px;flex:none;vertical-align:-4px}
 .site-header{background:#fff;position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;gap:22px;min-height:100px;position:relative}
+.hd{display:flex;align-items:center;gap:22px;min-height:64px;position:relative}
 .logo{font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--red);letter-spacing:-.02em;white-space:nowrap}
-.logo{display:flex;align-items:center}
-.logo img{height:90px;width:auto}
+.logo{display:block;flex:none;position:relative;width:136px;height:64px}
+.logo img{position:absolute;left:0;top:-2px;height:92px;width:auto;max-width:none;z-index:21}
 .hd-search{flex:1;min-width:140px;max-width:420px;margin-left:auto}
 .hd-search input{width:100%;margin:0;padding:11px 14px;border:1px solid var(--line);font:inherit;background:var(--soft)}
 .hd-actions{display:flex;gap:2px;align-items:center}
@@ -211,8 +211,8 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
 .site-footer a{color:#cfcfcf;text-decoration:none}
 .ft>div>a{display:block;padding:4px 0}
 .site-footer a:hover{color:#fff;text-decoration:underline}
-.ft-brand .logo{color:#fff;display:inline-flex;margin-bottom:10px}
-.ft-brand .logo img{height:79px}
+.ft-brand .logo{display:inline-block;width:auto;height:auto;margin-bottom:10px;color:#fff}
+.ft-brand .logo img{position:static;height:79px}
 .ft-brand p{max-width:34ch;color:#aaa}
 .ft-brand .btn{color:#fff}
 .ft-contact p{display:flex;gap:10px;margin:0 0 12px;align-items:flex-start}
@@ -238,7 +238,8 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .hd{gap:10px;min-height:56px;flex-wrap:wrap;padding-top:6px;padding-bottom:6px}
  .menu-btn{display:block;order:0}
  .logo{order:1;font-size:1.25rem}
- .logo img{height:64px}
+ .logo{width:76px;height:52px}
+ .logo img{height:56px;top:-2px}
  .hd-actions{order:2;margin-left:auto}
  .hd-actions span{display:none}
  .hd-search{order:3;flex:1 1 100%;max-width:none;margin-left:0}
