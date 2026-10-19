@@ -14,7 +14,7 @@
 		<nav class="nav" id="nav" aria-label="Main"><?php pcs_theme_nav(); ?></nav>
 		<form class="hd-search" role="search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<input type="search" name="s" placeholder="Search for chicken curry cut, mutton liver..." aria-label="Search">
-			<input type="hidden" name="post_type" value="pcs_product">
+			<input type="hidden" name="post_type" value="product">
 		</form>
 		<div class="hd-actions">
 			<a href="<?php echo esc_url( pcs_page_url( 'account' ) ); ?>" class="hd-user"><?php echo pcs_icon( 'user' ); // phpcs:ignore ?><span><?php echo is_user_logged_in() ? 'Account' : 'Login'; ?></span></a>

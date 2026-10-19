@@ -1,7 +1,7 @@
 </main>
 <?php
 $tel  = preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) );
-$cats = get_terms( array( 'taxonomy' => 'pcs_cat', 'hide_empty' => false ) );
+$cats = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true ) );
 ?>
 <footer class="site-footer">
 	<div class="ft-trust"><div class="wrap">
@@ -19,7 +19,7 @@ $cats = get_terms( array( 'taxonomy' => 'pcs_cat', 'hide_empty' => false ) );
 		<div>
 			<h4>Shop</h4>
 			<?php foreach ( $cats as $t ) : ?><a href="<?php echo esc_url( get_term_link( $t ) ); ?>"><?php echo esc_html( $t->name ); ?></a><?php endforeach; ?>
-			<a href="<?php echo esc_url( get_post_type_archive_link( 'pcs_product' ) ); ?>">All products</a>
+			<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">All products</a>
 			<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>">Cart</a>
 		</div>
 		<div>
@@ -45,7 +45,7 @@ $cats = get_terms( array( 'taxonomy' => 'pcs_cat', 'hide_empty' => false ) );
 </footer>
 <nav class="mbar" aria-label="Quick">
 	<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo pcs_icon( 'home' ); // phpcs:ignore ?>Home</a>
-	<a href="<?php echo esc_url( get_post_type_archive_link( 'pcs_product' ) ); ?>"><?php echo pcs_icon( 'grid' ); // phpcs:ignore ?>Shop</a>
+	<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php echo pcs_icon( 'grid' ); // phpcs:ignore ?>Shop</a>
 	<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>" class="js-cart"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?>Cart<b class="cart-count" hidden>0</b></a>
 	<a href="<?php echo esc_url( pcs_page_url( 'account' ) ); ?>"><?php echo pcs_icon( 'user' ); // phpcs:ignore ?>Account</a>
 </nav>

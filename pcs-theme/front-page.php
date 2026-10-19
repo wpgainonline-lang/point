@@ -1,11 +1,11 @@
 <?php
 get_header();
 $banners = pcs_lines( 'banners' );
-$cats    = get_terms( array( 'taxonomy' => 'pcs_cat', 'hide_empty' => true ) );
-$all     = get_posts( array( 'post_type' => 'pcs_product', 'numberposts' => 40, 'meta_key' => 'pcs_order', 'orderby' => 'meta_value_num', 'order' => 'ASC' ) );
+$cats    = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true ) );
+$all     = get_posts( array( 'post_type' => 'product', 'numberposts' => 40, 'orderby' => 'menu_order title', 'order' => 'ASC' ) );
 $by_cat  = array();
 foreach ( $all as $p ) {
-	$t = get_the_terms( $p->ID, 'pcs_cat' );
+	$t = get_the_terms( $p->ID, 'product_cat' );
 	$by_cat[ $t && ! is_wp_error( $t ) ? $t[0]->slug : '_' ][] = $p;
 }
 $mosaic = array();
@@ -14,7 +14,7 @@ foreach ( array( 'chicken', 'mutton' ) as $slug ) {
 		$mosaic[] = $p;
 	}
 }
-$coupons = pcs_lines( 'coupons' );
+$offer   = pcs_opt( 'offer' );
 ?>
 <section class="hero2">
 	<div class="wrap hero2-in">
@@ -44,8 +44,8 @@ $coupons = pcs_lines( 'coupons' );
 	<div><?php echo pcs_icon( 'cash' ); // phpcs:ignore ?><span><strong>Pay on delivery</strong>Cash when it arrives</span></div>
 </div></section>
 
-<?php if ( $coupons ) : ?>
-<section class="offer"><div class="wrap"><strong>Offer:</strong> use code <code><?php echo esc_html( $coupons[0][0] ); ?></code> and get <?php echo 'percent' === ( $coupons[0][1] ?? '' ) ? esc_html( $coupons[0][2] ) . '% off' : esc_html( pcs_money( $coupons[0][2] ?? 0 ) ) . ' off'; ?><?php echo ! empty( $coupons[0][3] ) ? ' on orders above ' . esc_html( pcs_money( $coupons[0][3] ) ) : ''; ?>.</div></section>
+<?php if ( $offer ) : ?>
+<section class="offer"><div class="wrap"><?php echo esc_html( $offer ); ?></div></section>
 <?php endif; ?>
 
 <?php foreach ( $cats as $t ) : $list = array_slice( $by_cat[ $t->slug ] ?? array(), 0, 12 ); if ( ! $list ) { continue; } ?>

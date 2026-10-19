@@ -8,6 +8,7 @@ add_action( 'after_setup_theme', function () {
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'custom-logo', array( 'height' => 80, 'width' => 240, 'flex-width' => true ) );
 	add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'style', 'script' ) );
+	add_theme_support( 'woocommerce' );
 	register_nav_menus( array( 'main' => 'Main menu' ) );
 } );
 
@@ -29,11 +30,18 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_dequeue_style( 'classic-theme-styles' );
 }, 100 );
 
+// The theme styles WooCommerce itself; keep its stock CSS and block styles off.
+add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+add_action( 'wp_enqueue_scripts', function () {
+	wp_dequeue_style( 'wc-blocks-style' );
+	wp_dequeue_style( 'wc-blocks-vendors-style' );
+}, 100 );
+
 function pcs_theme_nav() {
 	$items = array(
 		array( 'Home', home_url( '/' ) ),
-		array( 'Chicken', get_term_link( 'chicken', 'pcs_cat' ) ),
-		array( 'Mutton', get_term_link( 'mutton', 'pcs_cat' ) ),
+		array( 'Chicken', get_term_link( 'chicken', 'product_cat' ) ),
+		array( 'Mutton', get_term_link( 'mutton', 'product_cat' ) ),
 		array( 'About', pcs_page_url( 'about-us' ) ),
 		array( 'Quality & Hygiene', pcs_page_url( 'quality-hygiene' ) ),
 		array( 'Contact', pcs_page_url( 'contact-us' ) ),

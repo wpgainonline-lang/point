@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Primecutss MCP
  * Description: Exposes an MCP (Model Context Protocol) endpoint so an AI assistant can manage this WordPress site: content, menus, CSS, options, plugins, themes and files.
- * Version: 0.3.0
+ * Version: 0.4.0
  * Requires PHP: 7.4
  */
 
@@ -70,7 +70,7 @@ final class Primecutss_MCP {
 				return self::rpc_result( $id, array(
 					'protocolVersion' => '2025-03-26',
 					'capabilities'    => array( 'tools' => new stdClass() ),
-					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.3.0' ),
+					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.4.0' ),
 					'instructions'    => 'WordPress site ' . home_url() . '. Tools edit the LIVE site. File paths are relative to wp-content. File writes are backed up; use list_backups/restore_backup to undo.',
 				) );
 			case 'ping':
@@ -162,6 +162,7 @@ final class Primecutss_MCP {
 			self::t( 'list_backups', 'List file backups (newest first).' ),
 			self::t( 'restore_backup', 'Restore a backup by its id from list_backups.', array( 'id' => $s ), array( 'id' ) ),
 			self::t( 'clear_cache', 'Flush object cache and rewrite rules.' ),
+			self::t( 'install_plugin', 'Install a free plugin from wordpress.org by slug (e.g. woocommerce). Does not activate it.', array( 'slug' => $s ), array( 'slug' ) ),
 			self::t( 'run_action', 'Run a whitelisted maintenance action registered by another plugin (e.g. pcs_seed).', array( 'name' => $s ), array( 'name' ) ),
 			self::t( 'get_log', 'Recent tool calls made through this endpoint.' ),
 		);
@@ -344,6 +345,38 @@ final class Primecutss_MCP {
 		self::purge();
 		flush_rewrite_rules();
 		return array( 'ok' => true );
+	}
+
+	private static function tool_install_plugin( $a ) {
+		self::require_writes();
+		$slug = sanitize_key( $a['slug'] ?? '' );
+		if ( ! $slug ) {
+			throw new Exception( 'slug is required' );
+		}
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/misc.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+		if ( ! WP_Filesystem() ) {
+			throw new Exception( 'WordPress cannot write files directly on this host (filesystem credentials needed).' );
+		}
+		$api = plugins_api( 'plugin_information', array( 'slug' => $slug, 'fields' => array( 'sections' => false ) ) );
+		if ( is_wp_error( $api ) ) {
+			throw new Exception( 'wordpress.org: ' . $api->get_error_message() );
+		}
+		$skin = new Automatic_Upgrader_Skin();
+		$up   = new Plugin_Upgrader( $skin );
+		$r    = $up->install( $api->download_link );
+		if ( is_wp_error( $r ) ) {
+			throw new Exception( $r->get_error_message() );
+		}
+		if ( ! $r ) {
+			$err = $skin->get_upgrade_messages();
+			throw new Exception( 'Install failed: ' . implode( ' / ', (array) $err ) );
+		}
+		self::purge();
+		return array( 'installed' => $slug, 'version' => $api->version, 'plugin_file' => $up->plugin_info() );
 	}
 
 	private static function tool_run_action( $a ) {

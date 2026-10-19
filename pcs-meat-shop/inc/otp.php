@@ -106,11 +106,13 @@ function pcs_otp_verify( WP_REST_Request $r ) {
 	$user  = get_user_by( 'login', $login );
 	if ( ! $user ) {
 		$name = $rec['name'] ? $rec['name'] : 'Customer';
-		$uid  = wp_insert_user( array( 'user_login' => $login, 'user_pass' => wp_generate_password( 32 ), 'display_name' => $name, 'first_name' => $name, 'role' => 'pcs_customer', 'user_email' => $rec['email'] ) );
+		$uid  = wp_insert_user( array( 'user_login' => $login, 'user_pass' => wp_generate_password( 32 ), 'display_name' => $name, 'first_name' => $name, 'role' => 'customer', 'user_email' => $rec['email'] ) );
 		if ( is_wp_error( $uid ) ) {
 			return new WP_Error( 'user', 'Could not create your account.', array( 'status' => 500 ) );
 		}
 		update_user_meta( $uid, 'pcs_phone', $phone );
+		update_user_meta( $uid, 'billing_phone', $phone );
+		update_user_meta( $uid, 'billing_first_name', $name );
 		$user = get_user_by( 'id', $uid );
 	}
 	if ( user_can( $user, 'edit_posts' ) ) {

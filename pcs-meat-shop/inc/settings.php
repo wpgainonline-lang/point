@@ -20,13 +20,12 @@ function pcs_defaults() {
 		'pincodes'      => "603103|Kelambakkam\n603202|Siruseri\n600130|Navalur\n600119|Sholinganallur\n600097|Thoraipakkam",
 		'slots'         => "7:00 AM - 9:00 AM\n9:00 AM - 12:00 PM\n12:00 PM - 3:00 PM\n3:00 PM - 6:00 PM\n6:00 PM - 8:30 PM",
 		'lead_hours'    => 2,
-		'cod_enabled'   => 1,
 		'otp_provider'  => 'email',
 		'otp_key'       => '',
 		'otp_template'  => '',
 		'banners'       => '',
 		'usps'          => "Fresh & chilled|Never frozen, kept cold from cut to doorstep\nHygienic cuts|Cleaned, cut and packed in a hygienic counter\nCut your way|Curry, biryani, boneless and more\nChennai delivery|Pick a slot that suits you",
-		'coupons'       => '',
+		'offer'         => '',
 	);
 }
 
@@ -54,13 +53,20 @@ function pcs_money( $n ) {
 }
 
 function pcs_page_url( $slug ) {
+	if ( function_exists( 'wc_get_page_permalink' ) ) {
+		if ( 'checkout' === $slug ) {
+			return wc_get_checkout_url();
+		}
+		if ( 'account' === $slug ) {
+			return wc_get_page_permalink( 'myaccount' );
+		}
+	}
 	$p = get_page_by_path( $slug );
 	return $p ? get_permalink( $p ) : home_url( '/' . $slug . '/' );
 }
 
 add_action( 'admin_menu', function () {
-	add_menu_page( 'Shop', 'Shop', 'manage_options', 'pcs-settings', 'pcs_settings_page', 'dashicons-store', 26 );
-	add_submenu_page( 'pcs-settings', 'Settings', 'Settings', 'manage_options', 'pcs-settings', 'pcs_settings_page' );
+	add_menu_page( 'Meat Shop', 'Meat Shop', 'manage_options', 'pcs-settings', 'pcs_settings_page', 'dashicons-store', 26 );
 } );
 
 function pcs_fields() {
@@ -86,7 +92,6 @@ function pcs_fields() {
 			'slots'        => array( 'Delivery slots', 'textarea', 'One per line, e.g. 7:00 AM - 9:00 AM' ),
 		),
 		'Payment & login' => array(
-			'cod_enabled'  => array( 'Cash on Delivery', 'checkbox' ),
 			'otp_provider' => array( 'OTP provider', 'select', array( 'email' => 'Email OTP (free)', '2factor' => '2Factor.in SMS', 'msg91' => 'MSG91 SMS', 'test' => 'Test mode (code shown below, never for live)' ) ),
 			'otp_key'      => array( 'OTP API key / authkey', 'text', 'For 2Factor / MSG91 only.' ),
 			'otp_template' => array( 'OTP template id', 'text', 'MSG91 template id, or 2Factor template name (optional).' ),
@@ -96,7 +101,7 @@ function pcs_fields() {
 			'usps'    => array( 'Highlights strip', 'textarea', 'One per line: Title|Text' ),
 		),
 		'Offers'        => array(
-			'coupons' => array( 'Coupons', 'textarea', 'One per line: CODE|flat or percent|value|min order. Example: FRESH50|flat|50|300' ),
+			'offer' => array( 'Offer bar text', 'text', 'Shown as a red bar on the home page. Create the coupon itself under Marketing → Coupons. Leave empty to hide.' ),
 		),
 	);
 }
@@ -127,7 +132,7 @@ function pcs_settings_page() {
 		echo '<script>location.href=location.href</script>';
 	}
 	$cur = wp_parse_args( get_option( 'pcs_settings', array() ), pcs_defaults() );
-	echo '<div class="wrap"><h1>Shop settings</h1><form method="post">';
+	echo '<div class="wrap"><h1>Meat shop settings</h1><form method="post">';
 	wp_nonce_field( 'pcs_save', 'pcs_nonce' );
 	foreach ( pcs_fields() as $group => $fields ) {
 		echo '<h2>' . esc_html( $group ) . '</h2><table class="form-table">';
@@ -158,6 +163,6 @@ function pcs_settings_page() {
 		echo '<p><strong>Last test OTP:</strong> <code>' . esc_html( get_option( 'pcs_test_otp', '-' ) ) . '</code></p>';
 	}
 	echo '<p><button class="button button-primary">Save settings</button></p></form>';
-	echo '<h2>Demo data</h2><p>Import House of Cutts chicken &amp; mutton products with photos (prices are left at 0, set them under Shop → Products).</p>';
-	echo '<form method="post">' . wp_nonce_field( 'pcs_seed', 'pcs_seed_nonce', true, false ) . '<button class="button" name="pcs_seed" value="1">Import products &amp; pages</button></form></div>';
+	echo '<h2>Demo data</h2><p>Set up WooCommerce for the meat shop and bring over the products (safe to run again).</p>';
+	echo '<form method="post">' . wp_nonce_field( 'pcs_seed', 'pcs_seed_nonce', true, false ) . '<button class="button" name="pcs_seed" value="1">Run setup &amp; import products</button></form></div>';
 }
