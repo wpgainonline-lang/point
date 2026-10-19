@@ -10,7 +10,7 @@
 <header class="site-header">
 	<div class="wrap hd">
 		<button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false" aria-label="Menu" onclick="var n=document.getElementById('nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))">☰</button>
-		<a class="logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php if ( pcs_opt( 'logo' ) ) : ?><img src="<?php echo esc_url( pcs_opt( 'logo' ) ); ?>" alt="<?php echo esc_attr( pcs_opt( 'store_name' ) ); ?>" width="76" height="52"><?php else : echo esc_html( pcs_opt( 'store_name' ) ); endif; ?></a>
+		<a class="logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php if ( pcs_opt( 'logo' ) ) : ?><img src="<?php echo esc_url( pcs_opt( 'logo' ) ); ?>" alt="<?php echo esc_attr( pcs_opt( 'store_name' ) ); ?>" width="133" height="90"><?php else : echo esc_html( pcs_opt( 'store_name' ) ); endif; ?></a>
 		<nav class="nav" id="nav" aria-label="Main"><?php pcs_theme_nav(); ?></nav>
 		<form class="hd-search" role="search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<input type="search" name="s" placeholder="Search for chicken curry cut, mutton liver..." aria-label="Search">

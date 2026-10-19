@@ -22,10 +22,10 @@ p{margin:0 0 1em}
 /* top bar + header */
 .ic{width:18px;height:18px;flex:none;vertical-align:-4px}
 .site-header{background:#fff;position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;gap:22px;min-height:80px;position:relative}
+.hd{display:flex;align-items:center;gap:22px;min-height:100px;position:relative}
 .logo{font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--red);letter-spacing:-.02em;white-space:nowrap}
 .logo{display:flex;align-items:center}
-.logo img{height:66px;width:auto}
+.logo img{height:90px;width:auto}
 .hd-search{flex:1;min-width:140px;max-width:420px;margin-left:auto}
 .hd-search input{width:100%;margin:0;padding:11px 14px;border:1px solid var(--line);font:inherit;background:var(--soft)}
 .hd-actions{display:flex;gap:2px;align-items:center}
@@ -238,7 +238,7 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .hd{gap:10px;min-height:56px;flex-wrap:wrap;padding-top:6px;padding-bottom:6px}
  .menu-btn{display:block;order:0}
  .logo{order:1;font-size:1.25rem}
- .logo img{height:48px}
+ .logo img{height:64px}
  .hd-actions{order:2}
  .hd-actions span{display:none}
  .hd-search{order:3;flex:1 1 100%;max-width:none;margin-left:0}
