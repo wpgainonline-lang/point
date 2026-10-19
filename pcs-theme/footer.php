@@ -46,7 +46,7 @@ $cats = get_terms( array( 'taxonomy' => 'pcs_cat', 'hide_empty' => false ) );
 <nav class="mbar" aria-label="Quick">
 	<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo pcs_icon( 'home' ); // phpcs:ignore ?>Home</a>
 	<a href="<?php echo esc_url( get_post_type_archive_link( 'pcs_product' ) ); ?>"><?php echo pcs_icon( 'grid' ); // phpcs:ignore ?>Shop</a>
-	<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?>Cart<b class="cart-count" hidden>0</b></a>
+	<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>" class="js-cart"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?>Cart<b class="cart-count" hidden>0</b></a>
 	<a href="<?php echo esc_url( pcs_page_url( 'account' ) ); ?>"><?php echo pcs_icon( 'user' ); // phpcs:ignore ?>Account</a>
 </nav>
 <?php wp_footer(); ?>

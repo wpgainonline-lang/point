@@ -36,6 +36,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		'loggedIn' => is_user_logged_in(),
 		'otpEmail' => 'email' === pcs_opt( 'otp_provider', 'email' ),
 		'checkout' => esc_url( pcs_page_url( 'checkout' ) ),
+		'shop'     => esc_url( get_post_type_archive_link( 'pcs_product' ) ),
 		'account'  => esc_url( pcs_page_url( 'account' ) ),
 		'slots'    => pcs_slots_for_days(),
 		'currency' => '₹',

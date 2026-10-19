@@ -22,10 +22,10 @@ p{margin:0 0 1em}
 /* top bar + header */
 .ic{width:18px;height:18px;flex:none;vertical-align:-4px}
 .site-header{background:#fff;position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line)}
-.hd{display:flex;align-items:center;gap:22px;min-height:64px;position:relative}
+.hd{display:flex;align-items:center;gap:22px;min-height:80px;position:relative}
 .logo{font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--red);letter-spacing:-.02em;white-space:nowrap}
 .logo{display:flex;align-items:center}
-.logo img{height:52px;width:auto}
+.logo img{height:66px;width:auto}
 .hd-search{flex:1;min-width:140px;max-width:420px;margin-left:auto}
 .hd-search input{width:100%;margin:0;padding:11px 14px;border:1px solid var(--line);font:inherit;background:var(--soft)}
 .hd-actions{display:flex;gap:2px;align-items:center}
@@ -120,6 +120,24 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .faq details[open] summary:after{content:"−"}
 .faq details p{padding:0 18px 16px;margin:0;color:#444}
 .faq-wrap{align-items:start}
+
+/* cart drawer */
+body.lock{overflow:hidden}
+.dr{position:fixed;inset:0;z-index:50}
+.dr[hidden]{display:none}
+.dr-bg{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .25s}
+.dr-panel{position:absolute;top:0;right:0;bottom:0;width:min(420px,100%);background:#fff;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s ease;border-left:1px solid var(--line)}
+.dr.open .dr-bg{opacity:1}
+.dr.open .dr-panel{transform:none}
+.dr-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.dr-head h2{margin:0;font-size:1.15rem}
+.dr-x{background:none;border:0;font-size:1.8rem;line-height:1;cursor:pointer;padding:0 6px;color:var(--ink)}
+.dr-body{flex:1;overflow-y:auto;padding:4px 18px}
+.dr-body .line{padding:12px 0}
+.dr-body .empty{text-align:center;padding:48px 8px;color:var(--muted)}
+.dr-foot{border-top:1px solid var(--line);padding:14px 18px}
+.dr-foot dl{margin:0 0 12px}
+.dr-foot .btn{margin-bottom:8px}
 
 /* carousel */
 .car{position:relative}
@@ -220,6 +238,7 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .hd{gap:10px;min-height:56px;flex-wrap:wrap;padding-top:6px;padding-bottom:6px}
  .menu-btn{display:block;order:0}
  .logo{order:1;font-size:1.25rem}
+ .logo img{height:48px}
  .hd-actions{order:2}
  .hd-actions span{display:none}
  .hd-search{order:3;flex:1 1 100%;max-width:none;margin-left:0}

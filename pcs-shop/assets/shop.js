@@ -29,13 +29,13 @@
 		var c = load(), f = c.filter(function (i) { return i.id === id && i.g === g && i.cut === cut; })[0];
 		if (f) { f.q = Math.min(20, f.q + q); } else { c.push({ id: id, g: g, cut: cut || '', q: q }); }
 		save(c);
-		toast('Added to cart');
+		if (drawerOpen()) { refreshDrawer(); } else { toast('Added to cart'); }
 	}
 	var tt;
 	function toast(msg) {
 		var t = $('#pcs-toast');
 		if (!t) { t = document.createElement('div'); t.id = 'pcs-toast'; document.body.appendChild(t); }
-		t.innerHTML = esc(msg) + ' · <a href="' + PCS.checkout + '">View cart</a>';
+		t.innerHTML = esc(msg) + ' · <a href="' + PCS.checkout + '" class="js-cart">View cart</a>';
 		t.className = 'show';
 		clearTimeout(tt); tt = setTimeout(function () { t.className = ''; }, 2500);
 	}
@@ -67,6 +67,69 @@
 			var p = w.closest('.pdp'), pd = JSON.parse(p.getAttribute('data-card'));
 			$('#pdp-price', p).textContent = money(pd.prices[pd.weights.indexOf(parseInt(w.value, 10))]);
 		}
+	});
+
+
+	/* ---------------- cart drawer ---------------- */
+	var dr, dq = null, lastFocus;
+	var onCheckout = !!$('#pcs-checkout');
+	function drawerOpen() { return !!dr && dr.classList.contains('open'); }
+	function buildDrawer() {
+		dr = document.createElement('div'); dr.className = 'dr'; dr.hidden = true;
+		dr.innerHTML = '<div class="dr-bg"></div><aside class="dr-panel" role="dialog" aria-modal="true" aria-label="Your cart"><div class="dr-head"><h2>Your cart</h2><button type="button" class="dr-x" aria-label="Close cart">×</button></div><div class="dr-body"></div><div class="dr-foot" hidden></div></aside>';
+		document.body.appendChild(dr);
+		$('.dr-bg', dr).addEventListener('click', closeDrawer);
+		$('.dr-x', dr).addEventListener('click', closeDrawer);
+		dr.addEventListener('click', function (e) {
+			if (e.target.closest('.js-close')) { closeDrawer(); return; }
+			var b = e.target.closest('button[data-i]');
+			if (!b || !dq) { return; }
+			var l = dq.lines[+b.getAttribute('data-i')], c = load();
+			c.forEach(function (i) { if (i.id === l.id && i.g === l.g && i.cut === l.cut) { i.q += +b.getAttribute('data-d'); } });
+			save(c.filter(function (i) { return i.q > 0; }));
+			refreshDrawer();
+		});
+		document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawerOpen()) { closeDrawer(); } });
+	}
+	function openDrawer() {
+		if (!dr) { buildDrawer(); }
+		lastFocus = document.activeElement;
+		var tt2 = $('#pcs-toast'); if (tt2) { tt2.className = ''; }
+		dr.hidden = false; void dr.offsetWidth; dr.classList.add('open');
+		document.body.classList.add('lock');
+		$('.dr-x', dr).focus();
+		refreshDrawer();
+	}
+	function closeDrawer() {
+		dr.classList.remove('open'); document.body.classList.remove('lock');
+		setTimeout(function () { if (!dr.classList.contains('open')) { dr.hidden = true; } }, 260);
+		if (lastFocus && lastFocus.focus) { lastFocus.focus(); }
+	}
+	function refreshDrawer() {
+		var body = $('.dr-body', dr), foot = $('.dr-foot', dr), cart = load();
+		if (!cart.length) {
+			body.innerHTML = '<div class="empty"><p>Your cart is empty.</p><a class="btn js-close" href="' + PCS.shop + '">Browse products</a></div>';
+			foot.hidden = true; return;
+		}
+		api('quote', 'POST', { items: cart }).then(function (q) {
+			dq = q;
+			body.innerHTML = q.lines.map(function (l, i) {
+				return '<div class="line' + (l.ok ? '' : ' off') + '">' + (l.img ? '<img src="' + esc(l.img) + '" alt="" width="56" height="56">' : '') +
+					'<div class="grow"><strong>' + esc(l.name) + '</strong><div class="muted">' + esc(l.label) + (l.cut ? ' · ' + esc(l.cut) : '') + (l.ok ? '' : ' · unavailable') + '</div></div>' +
+					'<div class="step"><button type="button" data-i="' + i + '" data-d="-1" aria-label="Less">−</button><span>' + l.q + '</span><button type="button" data-i="' + i + '" data-d="1" aria-label="More">+</button></div>' +
+					'<div class="amt">' + money(l.total) + '</div></div>';
+			}).join('');
+			var below = q.min_order && q.subtotal < q.min_order;
+			var hint = below ? '<p class="msg bad">Minimum order ' + money(q.min_order) + '. Add ' + money(q.min_order - q.subtotal) + ' more.</p>' : (q.free_above && q.subtotal < q.free_above ? '<p class="muted">Add ' + money(q.free_above - q.subtotal) + ' more for free delivery</p>' : '');
+			foot.innerHTML = '<dl><div><dt>Items</dt><dd>' + money(q.subtotal) + '</dd></div><div><dt>Delivery</dt><dd>' + (q.delivery ? money(q.delivery) : 'Free') + '</dd></div><div class="tot"><dt>Total</dt><dd>' + money(q.total) + '</dd></div></dl>' + hint +
+				'<a class="btn btn-block" href="' + PCS.checkout + '">Checkout</a><button type="button" class="btn btn-line btn-block js-close">Continue shopping</button>';
+			foot.hidden = false;
+		}).catch(function (er) { body.innerHTML = '<p class="msg bad">' + esc(er.message) + '</p>'; });
+	}
+	document.addEventListener('click', function (e) {
+		var a = e.target.closest('.js-cart');
+		if (!a || onCheckout || e.ctrlKey || e.metaKey || e.shiftKey) { return; }
+		e.preventDefault(); openDrawer();
 	});
 
 	/* ---------------- pincode check ---------------- */

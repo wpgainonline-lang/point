@@ -18,7 +18,7 @@
 		</form>
 		<div class="hd-actions">
 			<a href="<?php echo esc_url( pcs_page_url( 'account' ) ); ?>" class="hd-user"><?php echo pcs_icon( 'user' ); // phpcs:ignore ?><span><?php echo is_user_logged_in() ? 'Account' : 'Login'; ?></span></a>
-			<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>" class="hd-cart"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?><span>Cart</span><b class="cart-count" hidden>0</b></a>
+			<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>" class="hd-cart js-cart"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?><span>Cart</span><b class="cart-count" hidden>0</b></a>
 		</div>
 	</div>
 </header>
