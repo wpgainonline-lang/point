@@ -25,13 +25,14 @@ $coupons = pcs_lines( 'coupons' );
 			<div class="hero2-cta">
 				<?php foreach ( $cats as $t ) : ?><a class="btn" href="<?php echo esc_url( get_term_link( $t ) ); ?>">Shop <?php echo esc_html( $t->name ); ?></a><?php endforeach; ?>
 			</div>
-			<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Enter delivery pincode" aria-label="Pincode"><button class="btn btn-dark" type="submit">Check</button><span class="msg" role="status"></span></form>
-			<ul class="chips"><li>Cash on delivery</li><li>Choose your time slot</li><li>Cut as you like</li></ul>
 		</div>
-		<div class="hero2-pics">
-			<?php foreach ( array_slice( $mosaic, 0, 4 ) as $p ) : ?>
-			<a href="<?php echo esc_url( get_permalink( $p ) ); ?>"><?php echo get_the_post_thumbnail( $p, 'medium_large', array( 'loading' => 'eager', 'alt' => esc_attr( $p->post_title ) ) ); ?><span><?php echo esc_html( $p->post_title ); ?></span></a>
-			<?php endforeach; ?>
+		<div class="hero2-card">
+			<strong>Check delivery in your area</strong>
+			<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" aria-label="Pincode"><button class="btn btn-dark" type="submit">Check</button><span class="msg" role="status"></span></form>
+			<ul class="chips"><li>Cash on delivery</li><li>Choose your time slot</li><li>Cut as you like</li></ul>
+			<div class="hero2-pics">
+				<?php foreach ( array_slice( $mosaic, 0, 4 ) as $p ) : ?><a href="<?php echo esc_url( get_permalink( $p ) ); ?>" title="<?php echo esc_attr( $p->post_title ); ?>"><?php echo get_the_post_thumbnail( $p, 'thumbnail', array( 'loading' => 'eager', 'alt' => esc_attr( $p->post_title ) ) ); ?></a><?php endforeach; ?>
+			</div>
 		</div>
 	</div>
 </section>
