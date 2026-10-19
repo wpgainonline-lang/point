@@ -193,5 +193,12 @@
 		}
 		quote();
 	}
+	$$('[data-slider]').forEach(function (sl) {
+		var track = $('.hero', sl);
+		['prev', 'next'].forEach(function (d) {
+			var b = $('.sl-' + d, sl);
+			if (b) { b.addEventListener('click', function () { track.scrollBy({ left: (d === 'next' ? 1 : -1) * track.clientWidth }); }); }
+		});
+	});
 	badge();
 })();
