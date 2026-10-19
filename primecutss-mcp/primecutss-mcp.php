@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Primecutss MCP
  * Description: Exposes an MCP (Model Context Protocol) endpoint so an AI assistant can manage this WordPress site: content, menus, CSS, options, plugins, themes and files.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Requires PHP: 7.4
  */
 
@@ -70,7 +70,7 @@ final class Primecutss_MCP {
 				return self::rpc_result( $id, array(
 					'protocolVersion' => '2025-03-26',
 					'capabilities'    => array( 'tools' => new stdClass() ),
-					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.1.0' ),
+					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.2.0' ),
 					'instructions'    => 'WordPress site ' . home_url() . '. Tools edit the LIVE site. File paths are relative to wp-content. File writes are backed up; use list_backups/restore_backup to undo.',
 				) );
 			case 'ping':
@@ -162,6 +162,7 @@ final class Primecutss_MCP {
 			self::t( 'list_backups', 'List file backups (newest first).' ),
 			self::t( 'restore_backup', 'Restore a backup by its id from list_backups.', array( 'id' => $s ), array( 'id' ) ),
 			self::t( 'clear_cache', 'Flush object cache and rewrite rules.' ),
+			self::t( 'run_action', 'Run a whitelisted maintenance action registered by another plugin (e.g. pcs_seed).', array( 'name' => $s ), array( 'name' ) ),
 			self::t( 'get_log', 'Recent tool calls made through this endpoint.' ),
 		);
 	}
@@ -343,6 +344,15 @@ final class Primecutss_MCP {
 		return array( 'ok' => true );
 	}
 
+	private static function tool_run_action( $a ) {
+		$allowed = apply_filters( 'pcmcp_allowed_actions', array() );
+		$name    = $a['name'] ?? '';
+		if ( ! isset( $allowed[ $name ] ) || ! is_callable( $allowed[ $name ] ) ) {
+			throw new Exception( 'Action not allowed. Available: ' . implode( ', ', array_keys( $allowed ) ) );
+		}
+		return array( 'result' => call_user_func( $allowed[ $name ] ) );
+	}
+
 	private static function tool_get_log( $a ) {
 		return array_reverse( get_option( self::OPT_LOG, array() ) );
 	}
@@ -432,6 +442,10 @@ final class Primecutss_MCP {
 
 	private static function tool_write_file( $a ) {
 		self::require_writes();
+		$rel = ltrim( str_replace( '\\', '/', (string) $a['path'] ), '/' );
+		if ( false === strpos( $rel, '..' ) && dirname( $rel ) !== '.' && ! is_dir( WP_CONTENT_DIR . '/' . dirname( $rel ) ) ) {
+			wp_mkdir_p( WP_CONTENT_DIR . '/' . dirname( $rel ) );
+		}
 		$f = self::resolve( $a['path'], false );
 		if ( preg_match( '/\.php$/i', $f ) ) {
 			self::lint_php( $a['content'] );
