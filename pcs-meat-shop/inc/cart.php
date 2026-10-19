@@ -127,6 +127,7 @@ function pcs_cart_payload() {
 			'<div><dt>Delivery</dt><dd>' . ( $fee ? esc_html( pcs_money( $fee ) ) : 'Free' ) . '</dd></div>' .
 			'<div class="tot"><dt>Total</dt><dd>' . esc_html( pcs_money( $cart->get_total( 'edit' ) ) ) . '</dd></div></dl>' . $hint,
 		'below' => (bool) ( $min && $sub && $sub < $min ),
+		'need'  => ( $min && $sub && $sub < $min ) ? (int) ceil( $min - $sub ) : 0,
 	);
 }
 

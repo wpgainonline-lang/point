@@ -118,7 +118,7 @@
 			foot.hidden = true; return;
 		}
 		body.innerHTML = p.lines;
-		foot.innerHTML = p.foot + (p.below ? '' : '<a class="btn btn-block" href="' + PCS.checkout + '">Checkout</a>') + '<button type="button" class="btn btn-line btn-block js-close">Continue shopping</button>';
+		foot.innerHTML = p.foot + (p.below ? '<button type="button" class="btn btn-block" disabled>Add ' + money(p.need) + ' more to checkout</button>' : '<a class="btn btn-block" href="' + PCS.checkout + '">Checkout</a>') + '<button type="button" class="btn btn-line btn-block js-close">Continue shopping</button>';
 		foot.hidden = false;
 	}
 	document.addEventListener('click', function (e) {

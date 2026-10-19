@@ -16,7 +16,7 @@ function pcs_defaults() {
 		'city'          => 'Chennai',
 		'delivery_fee'  => 40,
 		'free_above'    => 500,
-		'min_order'     => 200,
+		'min_order'     => 0,
 		'pincodes'      => "603103|Kelambakkam\n603202|Siruseri\n600130|Navalur\n600119|Sholinganallur\n600097|Thoraipakkam",
 		'slots'         => "7:00 AM - 9:00 AM\n9:00 AM - 12:00 PM\n12:00 PM - 3:00 PM\n3:00 PM - 6:00 PM\n6:00 PM - 8:30 PM",
 		'lead_hours'    => 2,
