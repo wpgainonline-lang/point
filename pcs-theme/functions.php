@@ -71,6 +71,7 @@ function pcs_icon( $name ) {
 		'grid'  => '<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>',
 		'cart'  => '<path d="M3 4h3l2.5 11h9L20 7H7"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
 		'user'  => '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+		'search' => '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/>',
 		'up'    => '<path d="M6 14l6-6 6 6"/>',
 	);
 	return '<svg class="ic" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="square" aria-hidden="true">' . ( $p[ $name ] ?? '' ) . '</svg>';

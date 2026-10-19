@@ -111,3 +111,25 @@ add_action( 'pre_get_posts', function ( $q ) {
 		$q->set( 'orderby', array( 'menu_order' => 'ASC', 'title' => 'ASC' ) );
 	}
 }, 99 );
+
+/* ---------------- live search suggestions ---------------- */
+add_action( 'rest_api_init', function () {
+	register_rest_route( 'pcs/v1', '/search', array( 'methods' => 'GET', 'permission_callback' => '__return_true', 'callback' => function ( WP_REST_Request $r ) {
+		$q = trim( sanitize_text_field( (string) $r['q'] ) );
+		if ( strlen( $q ) < 2 ) {
+			return array();
+		}
+		$ids = get_posts( array( 'post_type' => 'product', 'post_status' => 'publish', 's' => $q, 'numberposts' => 6, 'fields' => 'ids', 'orderby' => 'relevance' ) );
+		$out = array();
+		foreach ( $ids as $id ) {
+			$w     = pcs_weights( $id );
+			$out[] = array(
+				'name'  => get_the_title( $id ),
+				'url'   => get_permalink( $id ),
+				'img'   => get_the_post_thumbnail_url( $id, 'thumbnail' ) ?: '',
+				'price' => pcs_in_stock( $id ) ? 'from ' . pcs_money( pcs_price_for( $id, min( $w ) ) ) : 'Out of stock',
+			);
+		}
+		return $out;
+	} ) );
+} );

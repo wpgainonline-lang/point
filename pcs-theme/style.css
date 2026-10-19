@@ -26,8 +26,24 @@ p{margin:0 0 1em}
 .logo{font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--red);letter-spacing:-.02em;white-space:nowrap}
 .logo{display:block;flex:none;position:relative;width:136px;height:64px}
 .logo img{position:absolute;left:0;top:-2px;height:92px;width:auto;max-width:none;z-index:21}
-.hd-search{flex:1;min-width:140px;max-width:420px;margin-left:auto}
-.hd-search input{width:100%;margin:0;padding:11px 14px;border:1px solid var(--line);font:inherit;background:var(--soft)}
+.hd-search{position:relative;flex:1;min-width:140px;max-width:440px;margin-left:auto}
+.hd-search>.ic{position:absolute;left:12px;top:50%;margin-top:-9px;color:var(--muted);pointer-events:none}
+.hd-search input[type=search]{width:100%;margin:0;padding:11px 52px 11px 38px;border:1px solid #cfcfcf;font:inherit;background:#fff;-webkit-appearance:none;appearance:none}
+.hd-search input[type=search]::-webkit-search-cancel-button{display:none}
+.hd-search input[type=search]:focus{outline:0;border-color:var(--red)}
+.hd-search button{position:absolute;right:0;top:0;bottom:0;width:44px;border:0;background:var(--red);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.hd-search button:hover{background:#a50d26}
+.hd-search button .ic{width:18px;height:18px}
+.sug{position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid var(--line);border-top:0;z-index:40;max-height:70vh;overflow-y:auto}
+.sug[hidden]{display:none}
+.sug a{display:flex;align-items:center;gap:12px;padding:8px 12px;text-decoration:none;border-bottom:1px solid var(--line)}
+.sug a:last-child{border-bottom:0}
+.sug a:hover,.sug a.on{background:var(--soft)}
+.sug img,.sug .ph{width:40px;height:40px;object-fit:cover;flex:none;background:var(--soft)}
+.sug .nm{flex:1;font-weight:600;font-size:.92rem;line-height:1.25}
+.sug .pr{color:var(--muted);font-size:.85rem;white-space:nowrap}
+.sug a.all{justify-content:center;color:var(--red);font-weight:700}
+.sug .none{margin:0;padding:14px;color:var(--muted)}
 .hd-actions{display:flex;gap:2px;align-items:center}
 .hd-actions a{text-decoration:none;padding:8px 12px;font-weight:600;display:flex;align-items:center;gap:6px}
 .hd-actions a:hover{color:var(--red)}

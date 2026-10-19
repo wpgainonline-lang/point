@@ -190,6 +190,41 @@
 		});
 	}
 
+
+	/* ---------------- header search suggestions ---------------- */
+	var sf = $('.hd-search');
+	if (sf) {
+		var sq = $('#hd-q', sf), sg = $('#hd-sug', sf), st, sreq = 0, active = -1;
+		var shut = function () { sg.hidden = true; sq.setAttribute('aria-expanded', 'false'); active = -1; };
+		var items = function () { return $$('a', sg); };
+		var mark = function () { items().forEach(function (a, i) { a.classList.toggle('on', i === active); a.setAttribute('aria-selected', i === active); }); };
+		sq.addEventListener('input', function () {
+			clearTimeout(st);
+			var v = sq.value.trim();
+			if (v.length < 2) { shut(); return; }
+			st = setTimeout(function () {
+				var id = ++sreq;
+				api('search?q=' + encodeURIComponent(v)).then(function (r) {
+					if (id !== sreq) { return; }
+					var h = r.map(function (p) {
+						return '<a role="option" href="' + esc(p.url) + '">' + (p.img ? '<img src="' + esc(p.img) + '" alt="" width="40" height="40">' : '<span class="ph"></span>') + '<span class="nm">' + esc(p.name) + '</span><span class="pr">' + esc(p.price) + '</span></a>';
+					}).join('');
+					if (!r.length) { h = '<p class="none">No products found for “' + esc(v) + '”.</p>'; }
+					else { h += '<a role="option" class="all" href="' + esc(sf.action + '?s=' + encodeURIComponent(v) + '&post_type=product') + '">See all results for “' + esc(v) + '”</a>'; }
+					sg.innerHTML = h; sg.hidden = false; sq.setAttribute('aria-expanded', 'true'); active = -1;
+				}).catch(shut);
+			}, 220);
+		});
+		sq.addEventListener('keydown', function (e) {
+			var it = items();
+			if (e.key === 'Escape') { shut(); }
+			else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && it.length && !sg.hidden) {
+				e.preventDefault(); active = (active + (e.key === 'ArrowDown' ? 1 : -1) + it.length) % it.length; mark();
+			} else if (e.key === 'Enter' && active > -1 && it[active]) { e.preventDefault(); location.href = it[active].href; }
+		});
+		document.addEventListener('click', function (e) { if (!sf.contains(e.target)) { shut(); } });
+	}
+
 	/* ---------------- sliders ---------------- */
 	$$('[data-slider]').forEach(function (sl) {
 		var track = $('.hero', sl);
