@@ -24,7 +24,8 @@ p{margin:0 0 1em}
 .site-header{background:#fff;position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line)}
 .hd{display:flex;align-items:center;gap:22px;min-height:64px;position:relative}
 .logo{font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--red);letter-spacing:-.02em;white-space:nowrap}
-.logo img{height:40px;width:auto}
+.logo{display:flex;align-items:center}
+.logo img{height:52px;width:auto}
 .hd-search{flex:1;min-width:140px;max-width:420px;margin-left:auto}
 .hd-search input{width:100%;margin:0;padding:11px 14px;border:1px solid var(--line);font:inherit;background:var(--soft)}
 .hd-actions{display:flex;gap:2px;align-items:center}
@@ -120,6 +121,16 @@ input:focus,select:focus,textarea:focus,.btn:focus-visible,a:focus-visible{outli
 .faq details p{padding:0 18px 16px;margin:0;color:#444}
 .faq-wrap{align-items:start}
 
+/* carousel */
+.car{position:relative}
+.car-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;padding-bottom:2px}
+.car-track::-webkit-scrollbar{display:none}
+.car-track .card{flex:0 0 calc((100% - 42px)/4);scroll-snap-align:start;min-width:0}
+.car .sl-btn{border:1px solid var(--line);background:#fff;color:var(--ink);width:40px;height:56px;top:35%}
+.car .sl-btn:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.car .sl-prev{left:-14px}.car .sl-next{right:-14px}
+.car .sl-btn[disabled]{opacity:.35;cursor:default}
+
 /* product grid & cards */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
 .card{border:1px solid var(--line);background:#fff;display:flex;flex-direction:column}
@@ -182,7 +193,8 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
 .site-footer a{color:#cfcfcf;text-decoration:none}
 .ft>div>a{display:block;padding:4px 0}
 .site-footer a:hover{color:#fff;text-decoration:underline}
-.ft-brand .logo{color:#fff;display:inline-block;margin-bottom:10px}
+.ft-brand .logo{color:#fff;display:inline-flex;margin-bottom:10px}
+.ft-brand .logo img{height:79px}
 .ft-brand p{max-width:34ch;color:#aaa}
 .ft-brand .btn{color:#fff}
 .ft-contact p{display:flex;gap:10px;margin:0 0 12px;align-items:flex-start}
@@ -219,12 +231,12 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
  .card-body{padding:10px}
  .usp{border-right:0;border-bottom:1px solid var(--line)}
- .tile{flex-basis:120px}
  body{padding-bottom:58px}
  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:30}
  .mbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;font-size:.72rem;text-decoration:none;font-weight:600;position:relative}
  .mbar .cart-count{position:absolute;top:2px;left:55%}
  #pcs-toast{bottom:72px;width:calc(100% - 32px);text-align:center}
 }
+@media(max-width:900px){.car-track .card{flex-basis:calc((100% - 14px)/2.3)}.car .sl-prev{left:0}.car .sl-next{right:0}}
 @media(max-width:520px){.ft{grid-template-columns:1fr}.hero2-pics{gap:6px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}

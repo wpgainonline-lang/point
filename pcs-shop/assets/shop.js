@@ -200,5 +200,12 @@
 			if (b) { b.addEventListener('click', function () { track.scrollBy({ left: (d === 'next' ? 1 : -1) * track.clientWidth }); }); }
 		});
 	});
+	$$('[data-car]').forEach(function (c) {
+		var t = $('.car-track', c), prev = $('.sl-prev', c), next = $('.sl-next', c);
+		function upd() { prev.disabled = t.scrollLeft < 4; next.disabled = t.scrollLeft + t.clientWidth >= t.scrollWidth - 4; }
+		prev.addEventListener('click', function () { t.scrollBy({ left: -t.clientWidth * 0.85 }); });
+		next.addEventListener('click', function () { t.scrollBy({ left: t.clientWidth * 0.85 }); });
+		t.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd); upd();
+	});
 	badge();
 })();

@@ -44,23 +44,17 @@ $coupons = pcs_lines( 'coupons' );
 	<div><?php echo pcs_icon( 'cash' ); // phpcs:ignore ?><span><strong>Pay on delivery</strong>Cash when it arrives</span></div>
 </div></section>
 
-<section class="section"><div class="wrap">
-	<div class="section-head"><h2>Shop by cut</h2><a href="<?php echo esc_url( get_post_type_archive_link( 'pcs_product' ) ); ?>">View all</a></div>
-	<div class="rail">
-		<?php foreach ( $all as $p ) : ?>
-		<a class="tile" href="<?php echo esc_url( get_permalink( $p ) ); ?>"><?php echo get_the_post_thumbnail( $p, 'medium', array( 'loading' => 'lazy' ) ); ?><span><?php echo esc_html( $p->post_title ); ?></span></a>
-		<?php endforeach; ?>
-	</div>
-</div></section>
-
 <?php if ( $coupons ) : ?>
 <section class="offer"><div class="wrap"><strong>Offer:</strong> use code <code><?php echo esc_html( $coupons[0][0] ); ?></code> and get <?php echo 'percent' === ( $coupons[0][1] ?? '' ) ? esc_html( $coupons[0][2] ) . '% off' : esc_html( pcs_money( $coupons[0][2] ?? 0 ) ) . ' off'; ?><?php echo ! empty( $coupons[0][3] ) ? ' on orders above ' . esc_html( pcs_money( $coupons[0][3] ) ) : ''; ?>.</div></section>
 <?php endif; ?>
 
-<?php foreach ( $cats as $t ) : $list = array_slice( $by_cat[ $t->slug ] ?? array(), 0, 4 ); if ( ! $list ) { continue; } ?>
+<?php foreach ( $cats as $t ) : $list = array_slice( $by_cat[ $t->slug ] ?? array(), 0, 12 ); if ( ! $list ) { continue; } ?>
 <section class="section"><div class="wrap">
 	<div class="section-head"><h2>Best of <?php echo esc_html( $t->name ); ?></h2><a href="<?php echo esc_url( get_term_link( $t ) ); ?>">See all <?php echo esc_html( $t->name ); ?></a></div>
-	<div class="grid"><?php foreach ( $list as $p ) { echo pcs_card( $p->ID ); } // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+	<div class="car" data-car>
+		<div class="car-track" tabindex="0"><?php foreach ( $list as $p ) { echo pcs_card( $p->ID ); } // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+		<button type="button" class="sl-btn sl-prev" aria-label="Previous">‹</button><button type="button" class="sl-btn sl-next" aria-label="Next">›</button>
+	</div>
 </div></section>
 <?php endforeach; ?>
 

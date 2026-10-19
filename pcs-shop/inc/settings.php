@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function pcs_defaults() {
 	return array(
 		'store_name'    => 'House of Cutts',
+		'logo'          => content_url( '/uploads/2026/07/Gordonson.png' ),
 		'phone'         => '+91 877 814 3927',
 		'whatsapp'      => '918778143927',
 		'email'         => 'info@houseofcutts.com',
@@ -67,6 +68,7 @@ function pcs_fields() {
 	return array(
 		'Store'         => array(
 			'store_name' => array( 'Store name', 'text' ),
+			'logo'       => array( 'Logo image URL', 'text', 'Upload the logo in Media, then paste its URL here.' ),
 			'phone'      => array( 'Phone', 'text' ),
 			'whatsapp'   => array( 'WhatsApp number (with 91, no +)', 'text' ),
 			'email'      => array( 'Order notification email', 'text' ),

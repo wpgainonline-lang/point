@@ -12,7 +12,7 @@ $cats = get_terms( array( 'taxonomy' => 'pcs_cat', 'hide_empty' => false ) );
 	</div></div>
 	<div class="wrap ft">
 		<div class="ft-brand">
-			<a class="logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html( pcs_opt( 'store_name' ) ); ?></a>
+			<a class="logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php if ( pcs_opt( 'logo' ) ) : ?><img src="<?php echo esc_url( pcs_opt( 'logo' ) ); ?>" alt="<?php echo esc_attr( pcs_opt( 'store_name' ) ); ?>" width="116" height="79" loading="lazy"><?php else : echo esc_html( pcs_opt( 'store_name' ) ); endif; ?></a>
 			<p>Fresh meat, proper cuts and honest service that customers can trust every day.</p>
 			<a class="btn" href="https://wa.me/<?php echo esc_attr( pcs_opt( 'whatsapp' ) ); ?>" rel="noopener">Order on WhatsApp</a>
 		</div>
