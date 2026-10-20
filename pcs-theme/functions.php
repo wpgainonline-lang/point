@@ -39,19 +39,19 @@ add_action( 'wp_enqueue_scripts', function () {
 
 function pcs_theme_nav() {
 	$items = array(
-		array( 'Home', home_url( '/' ) ),
-		array( 'Chicken', get_term_link( 'chicken', 'product_cat' ) ),
-		array( 'Mutton', get_term_link( 'mutton', 'product_cat' ) ),
-		array( 'About', pcs_page_url( 'about-us' ) ),
-		array( 'Quality & Hygiene', pcs_page_url( 'quality-hygiene' ) ),
-		array( 'Contact', pcs_page_url( 'contact-us' ) ),
+		array( 'Home', home_url( '/' ), 'home' ),
+		array( 'Chicken', get_term_link( 'chicken', 'product_cat' ), 'chicken' ),
+		array( 'Mutton', get_term_link( 'mutton', 'product_cat' ), 'mutton' ),
+		array( 'About', pcs_page_url( 'about-us' ), 'info' ),
+		array( 'Quality', pcs_page_url( 'quality-hygiene' ), 'shield' ),
+		array( 'Contact', pcs_page_url( 'contact-us' ), 'phone' ),
 	);
 	$cur = ( is_ssl() ? 'https://' : 'http://' ) . ( $_SERVER['HTTP_HOST'] ?? '' ) . strtok( $_SERVER['REQUEST_URI'] ?? '/', '?' );
 	foreach ( $items as $i ) {
 		if ( is_wp_error( $i[1] ) ) {
 			continue;
 		}
-		echo '<a href="' . esc_url( $i[1] ) . '"' . ( untrailingslashit( $i[1] ) === untrailingslashit( $cur ) ? ' class="on"' : '' ) . '>' . esc_html( $i[0] ) . '</a>';
+		echo '<a href="' . esc_url( $i[1] ) . '"' . ( untrailingslashit( $i[1] ) === untrailingslashit( $cur ) ? ' class="on"' : '' ) . '>' . pcs_icon( $i[2] ) . '<span>' . esc_html( $i[0] ) . '</span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }
 
@@ -71,6 +71,10 @@ function pcs_icon( $name ) {
 		'grid'  => '<path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/>',
 		'cart'  => '<path d="M3 4h3l2.5 11h9L20 7H7"/><circle cx="10" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>',
 		'user'  => '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+		'chicken' => '<g transform="rotate(45 12 12)"><ellipse cx="12" cy="8" rx="4.6" ry="6"/><path d="M12 14v5.5"/><circle cx="10.5" cy="20.8" r="1.3"/><circle cx="13.5" cy="20.8" r="1.3"/></g>',
+		'mutton' => '<path d="M4.5 12C4.5 7 8.5 4 14 4c4 0 6.5 2 6.5 5 0 5-4.500 11-9.500 11-4 0-6.500-3-6.500-8z"/><circle cx="14" cy="10" r="2.300"/>',
+		'info'  => '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/>',
+		'menu'  => '<path d="M4 7h16M4 12h16M4 17h16"/>',
 		'search' => '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/>',
 		'up'    => '<path d="M6 14l6-6 6 6"/>',
 	);

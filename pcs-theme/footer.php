@@ -45,7 +45,7 @@ $cats = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => true ) );
 </footer>
 <nav class="mbar" aria-label="Quick">
 	<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo pcs_icon( 'home' ); // phpcs:ignore ?>Home</a>
-	<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>"><?php echo pcs_icon( 'grid' ); // phpcs:ignore ?>Shop</a>
+	<a href="#sbar" data-search-toggle><?php echo pcs_icon( 'search' ); // phpcs:ignore ?>Search</a>
 	<a href="<?php echo esc_url( pcs_page_url( 'checkout' ) ); ?>" class="js-cart"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?>Cart<b class="cart-count" hidden>0</b></a>
 	<a href="<?php echo esc_url( pcs_page_url( 'account' ) ); ?>"><?php echo pcs_icon( 'user' ); // phpcs:ignore ?>Account</a>
 </nav>

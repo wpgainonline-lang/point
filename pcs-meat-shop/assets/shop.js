@@ -242,6 +242,19 @@
 	}
 
 
+	/* ---------------- search panel ---------------- */
+	var sbar = $('#sbar');
+	$$('[data-search-toggle]').forEach(function (btn) {
+		btn.addEventListener('click', function (e) {
+			e.preventDefault();
+			var open = sbar.hidden;
+			sbar.hidden = !open;
+			$$('[data-search-toggle]').forEach(function (b) { b.setAttribute('aria-expanded', open); });
+			if (open) { $('#hd-q').focus(); }
+		});
+	});
+	document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sbar && !sbar.hidden && !drawerOpen()) { sbar.hidden = true; } });
+
 	/* ---------------- header search suggestions ---------------- */
 	var sf = $('.hd-search');
 	if (sf) {

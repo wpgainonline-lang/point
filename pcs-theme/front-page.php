@@ -59,8 +59,8 @@ $offer   = pcs_opt( 'offer' );
 <?php endforeach; ?>
 
 <?php if ( $banners ) : ?>
-<section class="section"><div class="wrap">
-	<div class="slider" data-slider>
+<section class="section" style="padding:0 0 32px"><div>
+	<div class="slider slider-full" data-slider>
 		<div class="hero" tabindex="0" aria-label="Offers">
 			<?php foreach ( $banners as $b ) : ?><a class="slide" href="<?php echo esc_url( home_url( $b[3] ?? '/' ) ); ?>"><img src="<?php echo esc_url( $b[0] ); ?>" alt="<?php echo esc_attr( $b[1] ?? '' ); ?>" loading="lazy" width="1896" height="829"></a><?php endforeach; ?>
 		</div>
