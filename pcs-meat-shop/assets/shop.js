@@ -155,27 +155,78 @@
 		if (pc && !pc.value) { try { var sp = localStorage.getItem('pcs_pin'); if (sp) { pc.value = sp; } } catch (x) {} }
 	});
 
-	/* ---------------- login (OTP) ---------------- */
+	/* ---------------- login: password, OTP, register ---------------- */
 	var lg = $('#pcs-login');
 	if (lg) {
-		var msg = $('#lg-msg'), phone = '';
+		var msg = $('#lg-msg');
 		var say = function (t, bad) { msg.textContent = t; msg.className = 'msg ' + (bad ? 'bad' : 'good'); };
-		$('#lg-send').addEventListener('click', function () {
-			phone = $('#lg-phone').value.replace(/\D/g, '');
-			if (phone.length !== 10) { return say('Enter a valid 10-digit mobile number.', true); }
-			var body = { phone: phone, name: $('#lg-name').value };
-			if ($('#lg-email')) { body.email = $('#lg-email').value; }
+		var digits = function (v) { return v.replace(/\D/g, ''); };
+		var done = function () { location.reload(); };
+
+		// switch between the password form, the OTP form and the register form
+		lg.addEventListener('click', function (e) {
+			var t = e.target.closest('[data-show]');
+			if (t) {
+				var w = t.getAttribute('data-show');
+				if (w === 'lg-reg') { $('#nc-intro').hidden = true; $('#lg-reg').hidden = false; $('#lr-name').focus(); }
+				else { $('#lg-pw').hidden = w !== 'lg-pw'; $('#lg-otp').hidden = w !== 'lg-otp'; }
+				say('');
+				return;
+			}
+			var eye = e.target.closest('[data-eye]');
+			if (eye) {
+				var inp = $('input', eye.parentNode), show = inp.type === 'password';
+				inp.type = show ? 'text' : 'password'; eye.textContent = show ? 'Hide' : 'Show';
+			}
+		});
+
+		// password login
+		$('#lg-pw').addEventListener('submit', function (e) {
+			e.preventDefault();
+			var id = $('#lp-id').value.trim(), pw = $('#lp-pw').value;
+			if (!id || !pw) { return say('Enter your mail id / mobile number and password.', true); }
+			say('Logging in...');
+			api('auth/login', 'POST', { id: id, password: pw }).then(done).catch(function (er) { say(er.message, true); });
+		});
+
+		// OTP login
+		var otpPhone = '';
+		$('#lg-otp').addEventListener('submit', function (e) {
+			e.preventDefault();
+			if (!$('.step-2', $('#lg-otp')).hidden) { return $('#lo-verify').click(); }
+			otpPhone = digits($('#lo-phone').value);
+			if (otpPhone.length !== 10) { return say('Enter a valid 10-digit mobile number.', true); }
+			var body = { phone: otpPhone };
+			if ($('#lo-email')) { body.email = $('#lo-email').value; }
 			say('Sending code...');
 			api('otp/send', 'POST', body).then(function () {
-				$('.step-1', lg).hidden = true; $('.step-2', lg).hidden = false; say('Code sent. It is valid for 10 minutes.');
+				$('#lg-otp .step-1').hidden = true; $('#lg-otp .step-2').hidden = false; $('#lo-code').focus(); say('Code sent. It is valid for 10 minutes.');
 			}).catch(function (er) { say(er.message, true); });
 		});
-		$('#lg-verify').addEventListener('click', function () {
+		$('#lo-verify').addEventListener('click', function () {
 			say('Verifying...');
-			api('otp/verify', 'POST', { phone: phone, code: $('#lg-code').value }).then(function () { location.reload(); })
-				.catch(function (er) { say(er.message, true); });
+			api('otp/verify', 'POST', { phone: otpPhone, code: $('#lo-code').value }).then(done).catch(function (er) { say(er.message, true); });
 		});
-		$('#lg-back').addEventListener('click', function () { $('.step-1', lg).hidden = false; $('.step-2', lg).hidden = true; say(''); });
+
+		// register (mobile is verified by OTP)
+		var regPhone = '';
+		$('#lg-reg').addEventListener('submit', function (e) {
+			e.preventDefault();
+			if (!$('#lg-reg .step-2').hidden) { return $('#lr-verify').click(); }
+			regPhone = digits($('#lr-phone').value);
+			var name = $('#lr-name').value.trim(), pw = $('#lr-pw').value;
+			if (name.length < 2) { return say('Please enter your name.', true); }
+			if (regPhone.length !== 10) { return say('Enter a valid 10-digit mobile number.', true); }
+			if (pw.length < 6) { return say('Password must be at least 6 characters.', true); }
+			say('Sending code...');
+			api('otp/send', 'POST', { register: 1, name: name, phone: regPhone, email: $('#lr-email').value, password: pw }).then(function () {
+				$('#lg-reg .step-1').hidden = true; $('#lg-reg .step-2').hidden = false; $('#lr-code').focus(); say('Code sent. It is valid for 10 minutes.');
+			}).catch(function (er) { say(er.message, true); });
+		});
+		$('#lr-verify').addEventListener('click', function () {
+			say('Creating your account...');
+			api('otp/verify', 'POST', { phone: regPhone, code: $('#lr-code').value }).then(done).catch(function (er) { say(er.message, true); });
+		});
 	}
 
 	/* ---------------- contact ---------------- */

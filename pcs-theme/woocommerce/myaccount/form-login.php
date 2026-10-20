@@ -1,7 +1,6 @@
 <?php
 /**
- * Sign-in is by mobile OTP only.
+ * Customer login: password, OTP, or register (see pcs_login_box()).
  */
 defined( 'ABSPATH' ) || exit;
-?>
-<div class="panel narrow"><?php echo pcs_login_box(); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+echo pcs_login_box(); // phpcs:ignore WordPress.Security.EscapeOutput

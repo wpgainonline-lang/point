@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'pcs/v1', '/otp/send', array( 'methods' => 'POST', 'callback' => 'pcs_otp_send', 'permission_callback' => '__return_true' ) );
 	register_rest_route( 'pcs/v1', '/otp/verify', array( 'methods' => 'POST', 'callback' => 'pcs_otp_verify', 'permission_callback' => '__return_true' ) );
+	register_rest_route( 'pcs/v1', '/auth/login', array( 'methods' => 'POST', 'callback' => 'pcs_auth_login', 'permission_callback' => '__return_true' ) );
 	register_rest_route( 'pcs/v1', '/logout', array( 'methods' => 'POST', 'callback' => function () { wp_logout(); return array( 'ok' => true ); }, 'permission_callback' => '__return_true' ) );
 } );
 
@@ -36,6 +37,24 @@ function pcs_otp_send( WP_REST_Request $r ) {
 	}
 	$provider = pcs_opt( 'otp_provider', 'email' );
 	$email    = '';
+	$pwh      = '';
+	if ( ! empty( $r['register'] ) ) {
+		$pw = (string) $r['password'];
+		if ( strlen( $pw ) < 6 ) {
+			return new WP_Error( 'pw', 'Password must be at least 6 characters.', array( 'status' => 400 ) );
+		}
+		if ( strlen( trim( (string) $r['name'] ) ) < 2 ) {
+			return new WP_Error( 'name', 'Please enter your name.', array( 'status' => 400 ) );
+		}
+		if ( get_user_by( 'login', 'pcs_' . $phone ) ) {
+			return new WP_Error( 'exists', 'This mobile number is already registered. Please login.', array( 'status' => 409 ) );
+		}
+		$reg_email = sanitize_email( (string) $r['email'] );
+		if ( $reg_email && email_exists( $reg_email ) ) {
+			return new WP_Error( 'email_taken', 'This email is already registered. Please login.', array( 'status' => 409 ) );
+		}
+		$pwh = wp_hash_password( $pw );
+	}
 	if ( 'email' === $provider ) {
 		$email = sanitize_email( (string) $r['email'] );
 		if ( ! is_email( $email ) ) {
@@ -49,7 +68,7 @@ function pcs_otp_send( WP_REST_Request $r ) {
 		return new WP_Error( 'wait', 'Please wait 30 seconds before asking for a new code.', array( 'status' => 429 ) );
 	}
 	$code = (string) random_int( 100000, 999999 );
-	set_transient( 'pcs_otp_' . $phone, array( 'h' => wp_hash_password( $code ), 'tries' => 0, 'name' => sanitize_text_field( (string) $r['name'] ), 'email' => $email ), 10 * MINUTE_IN_SECONDS );
+	set_transient( 'pcs_otp_' . $phone, array( 'h' => wp_hash_password( $code ), 'tries' => 0, 'name' => sanitize_text_field( (string) $r['name'] ), 'email' => $email ? $email : ( ! empty( $reg_email ) ? $reg_email : '' ), 'pwh' => $pwh ), 10 * MINUTE_IN_SECONDS );
 	set_transient( 'pcs_otp_gap_' . $phone, 1, 30 );
 
 	$sent = pcs_otp_deliver( $provider, $phone, $code, $email );
@@ -104,11 +123,19 @@ function pcs_otp_verify( WP_REST_Request $r ) {
 
 	$login = 'pcs_' . $phone;
 	$user  = get_user_by( 'login', $login );
+	if ( $user && ! empty( $rec['pwh'] ) ) {
+		return new WP_Error( 'exists', 'This mobile number is already registered. Please login.', array( 'status' => 409 ) );
+	}
 	if ( ! $user ) {
 		$name = $rec['name'] ? $rec['name'] : 'Customer';
 		$uid  = wp_insert_user( array( 'user_login' => $login, 'user_pass' => wp_generate_password( 32 ), 'display_name' => $name, 'first_name' => $name, 'role' => 'customer', 'user_email' => $rec['email'] ) );
 		if ( is_wp_error( $uid ) ) {
 			return new WP_Error( 'user', 'Could not create your account.', array( 'status' => 500 ) );
+		}
+		if ( ! empty( $rec['pwh'] ) ) {
+			global $wpdb;
+			$wpdb->update( $wpdb->users, array( 'user_pass' => $rec['pwh'] ), array( 'ID' => $uid ) );
+			clean_user_cache( $uid );
 		}
 		update_user_meta( $uid, 'pcs_phone', $phone );
 		update_user_meta( $uid, 'billing_phone', $phone );
@@ -117,6 +144,25 @@ function pcs_otp_verify( WP_REST_Request $r ) {
 	}
 	if ( user_can( $user, 'edit_posts' ) ) {
 		return new WP_Error( 'staff', 'This number cannot be used to log in.', array( 'status' => 403 ) );
+	}
+	wp_set_current_user( $user->ID );
+	wp_set_auth_cookie( $user->ID, true );
+	return array( 'ok' => true, 'name' => $user->display_name );
+}
+
+
+/** Login with mobile-or-email + password. */
+function pcs_auth_login( WP_REST_Request $r ) {
+	$id  = trim( (string) $r['id'] );
+	$pw  = (string) $r['password'];
+	$bad = new WP_Error( 'bad', 'Invalid mobile number / email or password.', array( 'status' => 401 ) );
+	if ( '' === $id || '' === $pw || ! pcs_throttle( 'lg' . strtolower( $id ), 8, 15 * MINUTE_IN_SECONDS ) || ! pcs_throttle( 'lgip' . pcs_ip(), 40, HOUR_IN_SECONDS ) ) {
+		return '' === $id || '' === $pw ? $bad : new WP_Error( 'rate', 'Too many attempts. Please try again later.', array( 'status' => 429 ) );
+	}
+	$phone = pcs_clean_phone( $id );
+	$user  = is_email( $id ) ? get_user_by( 'email', $id ) : ( $phone ? get_user_by( 'login', 'pcs_' . $phone ) : false );
+	if ( ! $user || user_can( $user, 'edit_posts' ) || ! wp_check_password( $pw, $user->user_pass, $user->ID ) ) {
+		return $bad;
 	}
 	wp_set_current_user( $user->ID );
 	wp_set_auth_cookie( $user->ID, true );

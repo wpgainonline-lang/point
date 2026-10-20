@@ -158,7 +158,7 @@ add_action( 'woocommerce_checkout_update_user_meta', function ( $user_id, $data 
 add_filter( 'woocommerce_checkout_must_be_logged_in_message', '__return_empty_string' );
 add_action( 'woocommerce_before_checkout_form', function () {
 	if ( ! is_user_logged_in() ) {
-		echo '<div class="panel narrow">' . pcs_login_box() . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo pcs_login_box( true ); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }, 5 );
 add_filter( 'woocommerce_account_menu_items', function ( $items ) {
