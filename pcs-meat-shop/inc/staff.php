@@ -44,12 +44,12 @@ function pcs_is_staff( $user_id = 0 ) {
 /* ---------------- staff can add and manage only customers / staff ---------------- */
 
 add_filter( 'editable_roles', function ( $roles ) {
-	return pcs_is_staff() ? array_intersect_key( $roles, array( 'customer' => 1, PCS_STAFF_ROLE => 1 ) ) : $roles;
+	return pcs_is_staff() ? array_intersect_key( $roles, array( 'customer' => 1, PCS_STAFF_ROLE => 1, 'pcs_delivery' => 1 ) ) : $roles;
 } );
 add_filter( 'map_meta_cap', function ( $caps, $cap, $uid, $args ) {
 	if ( in_array( $cap, array( 'edit_user', 'delete_user', 'promote_user', 'remove_user' ), true ) && pcs_is_staff( $uid ) && ! empty( $args[0] ) ) {
 		$t = get_userdata( (int) $args[0] );
-		if ( $t && ! array_intersect( (array) $t->roles, array( 'customer', PCS_STAFF_ROLE ) ) ) {
+		if ( $t && ! array_intersect( (array) $t->roles, array( 'customer', PCS_STAFF_ROLE, 'pcs_delivery' ) ) ) {
 			$caps[] = 'do_not_allow';
 		}
 	}
@@ -57,7 +57,7 @@ add_filter( 'map_meta_cap', function ( $caps, $cap, $uid, $args ) {
 }, 10, 4 );
 add_action( 'pre_get_users', function ( $q ) {
 	if ( is_admin() && pcs_is_staff() ) {
-		$q->set( 'role__in', array( 'customer', PCS_STAFF_ROLE ) );
+		$q->set( 'role__in', array( 'customer', PCS_STAFF_ROLE, 'pcs_delivery' ) );
 	}
 } );
 
@@ -297,6 +297,18 @@ function pcs_staff_home() {
 		.pcs-badge.processing{background:#c8102e;color:#fff}.pcs-badge.pcs-packed{background:#f0b429;color:#222}.pcs-badge.pcs-out{background:#2c7be5;color:#fff}.pcs-badge.completed{background:#1e7a3c;color:#fff}
 		.pcs-btns{display:flex;flex-direction:column;gap:6px;min-width:170px}
 		.pcs-btns .button{text-align:center;font-size:15px!important;padding:6px 12px!important;height:auto!important;line-height:1.3!important}
+		.pcs-team{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:12px}
+		.pcs-tm{background:#fff;border:1px solid #e3e3e3;border-left:6px solid #aaa;padding:12px 16px;display:flex;flex-direction:column;gap:2px;font-size:15px;color:#555}
+		.pcs-tm b{font-size:19px;color:#1c1c1c}
+		.pcs-tm .st{font-weight:700;font-size:16px}
+		.pcs-tm.free{border-left-color:#1e7a3c}.pcs-tm.free .st{color:#1e7a3c}
+		.pcs-tm.busy{border-left-color:#f0b429}.pcs-tm.busy .st{color:#b57e00}
+		.pcs-tm.off{border-left-color:#999;opacity:.7}
+		.pcs-wait{background:#fff8e1;border-left:4px solid #f0b429;padding:12px 16px;font-size:16px}
+		.pcs-as{margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+		.pcs-as label{font-size:14px;color:#666}
+		.pcs-as select{font-size:15px;max-width:230px}
+		.pcs-issue{background:#fdecec;border-left:4px solid #c8102e;padding:6px 10px;font-size:14px;width:100%}
 		.pcs-empty{background:#fff;border:1px solid #e3e3e3;padding:36px;text-align:center;font-size:18px;color:#666}
 		@media(max-width:900px){.pcs-ord{grid-template-columns:1fr}.pcs-btns{flex-direction:row;flex-wrap:wrap}}
 		</style>
@@ -321,6 +333,8 @@ function pcs_staff_home() {
 			<a href="<?php echo $link( 'user-new.php' ); // phpcs:ignore ?>">+ Add user</a>
 		</div>
 
+		<?php pcs_team_panel( $orders ); ?>
+
 		<h2>Orders to deliver</h2>
 		<?php if ( ! $groups ) : ?>
 			<div class="pcs-empty">No orders waiting. New orders will show here.</div>
@@ -342,6 +356,7 @@ function pcs_staff_home() {
 							<div class="items"><?php echo esc_html( pcs_order_items_text( $o ) ); ?></div>
 							<div class="meta"><?php echo esc_html( $o->get_billing_address_1() ); ?></div>
 							<div class="tot"><?php echo esc_html( pcs_money( $o->get_total() ) ); ?> <span class="meta">· <?php echo esc_html( $o->get_payment_method_title() ); ?></span></div>
+							<?php pcs_assign_box( $o ); ?>
 						</div>
 						<div class="pcs-btns">
 							<?php
