@@ -677,3 +677,29 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .woocommerce-checkout table.shop_table dl.variation{margin:-2px 0 0 64px}
 .woocommerce-checkout table.shop_table dl.variation dd p,.woocommerce-checkout table.shop_table dl.variation dt{margin:0}
 .woocommerce-checkout table.shop_table td.product-name{padding-bottom:10px}
+
+/* checkout: darker borders */
+.woocommerce-checkout{--bd:#9c9c9c;--bd2:#c2c2c2}
+.woocommerce-checkout #customer_details>div{border-color:var(--bd2);border-top-color:var(--red)}
+.woocommerce-checkout #order_review{border-color:var(--bd2);border-top-color:var(--red)}
+.woocommerce-checkout .co-steps li{border-color:var(--bd2)}
+.woocommerce-checkout .co-steps .done{border-color:#7fc493}
+.woocommerce-checkout .co-steps .on{border-color:var(--red)}
+.woocommerce-checkout .co-steps b{border-color:var(--bd2)}
+.woocommerce-checkout .woocommerce form .form-row input.input-text,.woocommerce-checkout .woocommerce form .form-row select,.woocommerce-checkout .woocommerce form .form-row textarea,.woocommerce-checkout form .form-row input.input-text,.woocommerce-checkout form .form-row select,.woocommerce-checkout form .form-row textarea{border:1.5px solid var(--bd)}
+.woocommerce-checkout form .form-row input.input-text:focus,.woocommerce-checkout form .form-row textarea:focus{border-color:var(--red)}
+.woocommerce-checkout form .form-row input[readonly]{background:#f1f1f1}
+.woocommerce-checkout .pcs-slot{border-top-color:var(--bd)}
+.woocommerce-checkout .pcs-slot .chip span{border:1.5px solid var(--bd)}
+.woocommerce-checkout .pcs-slot .chip input:checked+span{border-color:var(--red)}
+.woocommerce-checkout table.shop_table th,.woocommerce-checkout table.shop_table td{border-bottom-color:var(--bd2)}
+.woocommerce-checkout #payment ul.payment_methods li{border:1.5px solid var(--bd)}
+.woocommerce-checkout #payment ul.payment_methods li:has(input:checked){border-color:var(--red)}
+.woocommerce-checkout .co-trust{border-top-color:var(--bd)}
+.woocommerce-checkout form.checkout_coupon,.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info{border-color:var(--bd)}
+.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info{border-left-color:var(--red)}
+.woocommerce-checkout .auth,.woocommerce-checkout .co-sum.panel{border-color:var(--bd2)}
+.woocommerce-checkout .auth-stack .auth-login{border-bottom-color:var(--bd2)}
+.woocommerce-checkout .auth .lform input{border:1.5px solid var(--bd)}
+.woocommerce-checkout .ci img{border:1px solid var(--bd2)}
+.woocommerce-checkout .co-sum .line{border-bottom-color:var(--bd2)}
