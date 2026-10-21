@@ -165,6 +165,35 @@ add_action( 'admin_head', function () {
 	echo '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Afacad:wght@400..700&display=swap">';
 	echo '<style>' . pcs_staff_css() . '</style>';
 } );
+// Other plugins' notices (backup, cache, ...) are not for shop staff.
+add_action( 'admin_head', function () {
+	global $wp_filter;
+	if ( ! pcs_is_staff() ) {
+		return;
+	}
+	foreach ( array( 'admin_notices', 'all_admin_notices', 'network_admin_notices', 'user_admin_notices' ) as $h ) {
+		if ( empty( $wp_filter[ $h ] ) ) {
+			continue;
+		}
+		foreach ( $wp_filter[ $h ]->callbacks as $prio => $cbs ) {
+			foreach ( $cbs as $cb ) {
+				$f    = $cb['function'];
+				$name = '';
+				if ( is_array( $f ) ) {
+					$name = is_object( $f[0] ) ? get_class( $f[0] ) : (string) $f[0];
+				} elseif ( is_string( $f ) ) {
+					$name = $f;
+				} elseif ( $f instanceof Closure ) {
+					$name = ( new ReflectionFunction( $f ) )->getFileName();
+				}
+				if ( preg_match( '/ai1wm|all-in-one|litespeed|hostinger|breakdance/i', $name ) ) {
+					remove_action( $h, $f, $prio );
+				}
+			}
+		}
+	}
+}, 1 );
+
 add_filter( 'admin_footer_text', function ( $t ) {
 	return pcs_is_staff() ? '' : $t;
 } );
