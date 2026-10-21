@@ -303,5 +303,31 @@
 		prev.addEventListener('click', function () { t.scrollBy({ left: -t.clientWidth * 0.85 }); });
 		next.addEventListener('click', function () { t.scrollBy({ left: t.clientWidth * 0.85 }); });
 		t.addEventListener('scroll', upd, { passive: true }); window.addEventListener('resize', upd); upd();
+
+		// dots (one per card) and gentle auto-scroll for carousels that ask for it
+		var dotsBox = c.parentNode.querySelector('.car-dots');
+		var cards = t.children;
+		var gap = function () { return parseFloat(getComputedStyle(t).columnGap) || 0; };
+		var stepW = function () { return cards[0].getBoundingClientRect().width + gap(); };
+		var idx = function () { return Math.min(cards.length - 1, Math.round(t.scrollLeft / stepW())); };
+		if (dotsBox && cards.length > 1) {
+			for (var i = 0; i < cards.length; i++) { var d = document.createElement('button'); d.type = 'button'; d.setAttribute('aria-label', 'Go to review ' + (i + 1)); d.dataset.i = i; dotsBox.appendChild(d); }
+			dotsBox.removeAttribute('aria-hidden');
+			dotsBox.addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { t.scrollTo({ left: b.dataset.i * stepW() }); } });
+			var mark = function () { var k = t.scrollLeft + t.clientWidth >= t.scrollWidth - 4 ? cards.length - 1 : idx(); $$('button', dotsBox).forEach(function (b, j) { b.className = j === k ? 'on' : ''; }); };
+			t.addEventListener('scroll', mark, { passive: true }); mark();
+		}
+		var every = parseInt(c.getAttribute('data-auto'), 10);
+		if (every && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			var hold = false;
+			var tick = function () {
+				if (hold || document.hidden) { return; }
+				if (t.scrollLeft + t.clientWidth >= t.scrollWidth - 4) { t.scrollTo({ left: 0 }); } else { t.scrollBy({ left: stepW() }); }
+			};
+			var timer = setInterval(tick, every);
+			['mouseenter', 'focusin', 'touchstart'].forEach(function (ev) { c.addEventListener(ev, function () { hold = true; }, { passive: true }); });
+			['mouseleave', 'focusout'].forEach(function (ev) { c.addEventListener(ev, function () { hold = false; }); });
+			c.addEventListener('touchend', function () { setTimeout(function () { hold = false; }, 6000); }, { passive: true });
+		}
 	});
 })();

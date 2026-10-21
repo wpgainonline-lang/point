@@ -26,6 +26,7 @@ function pcs_defaults() {
 		'banners'       => '',
 		'usps'          => "Fresh & chilled|Never frozen, kept cold from cut to doorstep\nHygienic cuts|Cleaned, cut and packed in a hygienic counter\nCut your way|Curry, biryani, boneless and more\nChennai delivery|Pick a slot that suits you",
 		'offer'         => '',
+		'faqs'          => "Where do you deliver?|We deliver in {city}. Enter your pincode on the home page or at checkout to check your area. More cities are coming soon.\nHow do I pay?|Cash on delivery for now. Online payment will be added soon.\nWhat is the delivery charge?|Delivery is {delivery_fee}{free_line}.\nHow do I choose a delivery time?|At checkout, pick a day and a time slot that suits you. Slots that are too close to the current time are not shown.\nCan I choose how the meat is cut?|Yes. Pick the cut you want, such as curry cut, biryani cut or boneless. For special requests, add a note for the butcher at checkout.\nHow is the meat kept fresh?|Our meat is handled and kept under chilled conditions, from cutting and packing to delivery, to preserve its freshness, texture and flavour.\nWhere can I see my orders?|Log in and open My Orders from the menu to see your orders and their status.\nCan I visit the shop?|Yes, you are welcome. We are at {address}. Call {phone} if you need a large quantity.",
 		'nav_icon_chicken' => '',
 		'nav_icon_mutton'  => '',
 		'hero_img_chicken' => '',
@@ -51,6 +52,20 @@ function pcs_lines( $key ) {
 		}
 	}
 	return $out;
+}
+
+/** Fills {city}, {phone} and friends in FAQ text from the settings. */
+function pcs_faq_text( $t ) {
+	$free = (float) pcs_opt( 'free_above', 0 );
+	$min  = (float) pcs_opt( 'min_order', 0 );
+	return strtr( (string) $t, array(
+		'{city}'         => pcs_opt( 'city' ),
+		'{phone}'        => pcs_opt( 'phone' ),
+		'{address}'      => str_replace( "\n", ', ', pcs_opt( 'address' ) ),
+		'{delivery_fee}' => pcs_money( pcs_opt( 'delivery_fee', 0 ) ),
+		'{free_line}'    => ( $free > 0 ? ', and free above ' . pcs_money( $free ) : '' ) . ( $min > 0 ? '. Minimum order is ' . pcs_money( $min ) : '' ),
+		'{min_order}'    => pcs_money( $min ),
+	) );
 }
 
 function pcs_money( $n ) {
@@ -108,6 +123,7 @@ function pcs_fields() {
 			'hero_img_mutton'  => array( 'Hero photo: Mutton', 'image', 'Leave empty to use a product photo.' ),
 			'banners' => array( 'Banners', 'textarea', 'One per line: image URL|Title|Subtitle|Link' ),
 			'usps'    => array( 'Highlights strip', 'textarea', 'One per line: Title|Text' ),
+			'faqs' => array( 'FAQ (questions & answers)', 'textarea', 'One per line: Question|Answer. You can use {city} {delivery_fee} {free_line} {min_order} {address} {phone}.' ),
 			'testimonials' => array( 'Customer reviews', 'textarea', 'One per line: Name|City|Review text. Shown as a carousel on the home page.' ),
 		),
 		'Offers'        => array(

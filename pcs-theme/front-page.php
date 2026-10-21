@@ -104,32 +104,44 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 </div></section>
 
 <?php $revs = pcs_lines( 'testimonials' ); if ( $revs ) : ?>
-<section class="section"><div class="wrap">
-	<div class="section-head"><h2>What our customers say</h2></div>
-	<div class="car car-rev" data-car>
+<section class="section rev-sec"><div class="wrap">
+	<div class="center-head">
+		<span class="kicker">Reviews</span>
+		<h2>What our customers say</h2>
+		<p class="stars-line"><span class="stars" aria-hidden="true">★★★★★</span> Verified customer reviews</p>
+	</div>
+	<div class="car car-rev" data-car data-auto="4500">
 		<div class="car-track" tabindex="0">
 			<?php foreach ( $revs as $r ) : ?>
 			<figure class="rcard">
-				<div class="rtop"><span class="av" aria-hidden="true"><?php echo esc_html( mb_strtoupper( mb_substr( $r[0], 0, 1 ) ) ); ?></span><span><strong><?php echo esc_html( $r[0] ); ?></strong><br><span class="muted"><?php echo esc_html( $r[1] ?? '' ); ?></span></span></div>
+				<span class="qm" aria-hidden="true">&ldquo;</span>
 				<div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div>
 				<blockquote><?php echo esc_html( $r[2] ?? '' ); ?></blockquote>
-				<p class="ver"><?php echo pcs_icon( 'shield' ); // phpcs:ignore ?> Verified customer</p>
+				<figcaption>
+					<span class="av" aria-hidden="true"><?php echo esc_html( mb_strtoupper( mb_substr( $r[0], 0, 1 ) ) ); ?></span>
+					<span><strong><?php echo esc_html( $r[0] ); ?></strong><span class="muted"><?php echo esc_html( $r[1] ?? '' ); ?></span></span>
+					<span class="ver"><?php echo pcs_icon( 'shield' ); // phpcs:ignore ?> Verified</span>
+				</figcaption>
 			</figure>
 			<?php endforeach; ?>
 		</div>
 		<button type="button" class="sl-btn sl-prev" aria-label="Previous">‹</button><button type="button" class="sl-btn sl-next" aria-label="Next">›</button>
 	</div>
+	<div class="car-dots" aria-hidden="true"></div>
 </div></section>
 <?php endif; ?>
 
-<section class="section soft"><div class="wrap split faq-wrap">
-	<div><span class="kicker">Questions</span><h2>Good to know</h2><p>Still unsure? Call us on <a href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) ) ); ?>"><strong><?php echo esc_html( pcs_opt( 'phone' ) ); ?></strong></a>.</p></div>
-	<div class="faq">
-		<details><summary>Where do you deliver?</summary><p>We currently deliver in <?php echo esc_html( pcs_opt( 'city' ) ); ?>. Enter your pincode on this page to check. More cities are coming soon.</p></details>
-		<details><summary>How do I pay?</summary><p>Cash on delivery for now. Online payment will be added soon.</p></details>
-		<details><summary>What is the delivery charge?</summary><p>Delivery is <?php echo esc_html( pcs_money( pcs_opt( 'delivery_fee', 0 ) ) ); ?><?php echo (float) pcs_opt( 'free_above', 0 ) > 0 ? ', and free above ' . esc_html( pcs_money( pcs_opt( 'free_above' ) ) ) : ''; ?>.<?php echo (float) pcs_opt( 'min_order', 0 ) > 0 ? ' Minimum order is ' . esc_html( pcs_money( pcs_opt( 'min_order' ) ) ) . '.' : ''; ?></p></details>
-		<details><summary>Can I choose how the meat is cut?</summary><p>Yes. Pick the cut you want, such as curry cut, biryani cut or boneless. For special requests, add a note at checkout.</p></details>
-		<details><summary>Can I visit the shop?</summary><p>Yes, you are welcome. We are at <?php echo esc_html( str_replace( "\n", ', ', pcs_opt( 'address' ) ) ); ?>.</p></details>
+<?php $faqs = pcs_lines( 'faqs' ); if ( $faqs ) : ?>
+<section class="section soft faq-sec"><div class="wrap">
+	<div class="center-head">
+		<span class="kicker">FAQ</span>
+		<h2>Frequently asked questions</h2>
+	</div>
+	<div class="faq-grid">
+		<?php foreach ( $faqs as $f ) : ?>
+		<details class="faq-item"><summary><span><?php echo esc_html( pcs_faq_text( $f[0] ) ); ?></span><i class="pm" aria-hidden="true"></i></summary><p><?php echo esc_html( pcs_faq_text( $f[1] ?? '' ) ); ?></p></details>
+		<?php endforeach; ?>
 	</div>
 </div></section>
+<?php endif; ?>
 <?php get_footer(); ?>
