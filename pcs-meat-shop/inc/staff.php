@@ -64,15 +64,18 @@ add_action( 'pre_get_users', function ( $q ) {
 /* ---------------- menu: only the shop ---------------- */
 
 add_action( 'admin_menu', function () {
-	$title = 'Home';
 	if ( pcs_is_staff() ) {
 		add_menu_page( 'Home', 'Home', 'manage_woocommerce', 'pcs-home', 'pcs_staff_home', 'dashicons-store', 2 );
 		add_menu_page( 'Price & Stock', 'Price & Stock', 'edit_products', 'pcs-stock', 'pcs_stock_page', 'dashicons-tag', 3 );
-	} else {
+	}
+}, 5 );
+// For admins the same pages live under Meat Shop (registered after the parent menu exists).
+add_action( 'admin_menu', function () {
+	if ( ! pcs_is_staff() ) {
 		add_submenu_page( 'pcs-settings', 'Shop home', 'Shop home', 'manage_woocommerce', 'pcs-home', 'pcs_staff_home' );
 		add_submenu_page( 'pcs-settings', 'Price & Stock', 'Price & Stock', 'edit_products', 'pcs-stock', 'pcs_stock_page' );
 	}
-}, 5 );
+}, 20 );
 
 add_action( 'admin_menu', function () {
 	if ( ! pcs_is_staff() ) {

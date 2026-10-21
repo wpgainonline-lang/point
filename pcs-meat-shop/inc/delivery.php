@@ -490,3 +490,75 @@ function pcs_create_drivers() {
 	}
 	return implode( ' ; ', $out );
 }
+
+/* ---------------- assign from the normal WooCommerce order screen too ---------------- */
+
+add_action( 'add_meta_boxes', function () {
+	$hpos   = class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) && \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled();
+	$screen = $hpos ? wc_get_page_screen_id( 'shop-order' ) : 'shop_order';
+	add_meta_box( 'pcs_driver_box', 'Delivery boy', 'pcs_driver_metabox', $screen, 'side', 'high' );
+} );
+
+function pcs_driver_metabox( $post_or_order ) {
+	$order = $post_or_order instanceof WP_Post ? wc_get_order( $post_or_order->ID ) : $post_or_order;
+	if ( ! $order ) {
+		return;
+	}
+	$cur   = pcs_order_driver( $order );
+	$loads = pcs_driver_loads();
+	wp_nonce_field( 'pcs_drv_box', 'pcs_drv_nonce' );
+	if ( $order->get_meta( '_pcs_issue' ) ) {
+		echo '<p style="background:#fdecec;border-left:4px solid #c8102e;padding:6px 10px">Problem: ' . esc_html( $order->get_meta( '_pcs_issue' ) ) . '</p>';
+	}
+	echo '<select name="pcs_driver_sel" style="width:100%"><option value="none">Not assigned</option><option value="auto">Pick for me (auto)</option>';
+	foreach ( pcs_drivers() as $d ) {
+		printf( '<option value="%d" %s>%s%s</option>', (int) $d->ID, selected( $cur, $d->ID, false ), esc_html( $d->display_name ), isset( $loads[ $d->ID ] ) ? ' (' . (int) $loads[ $d->ID ] . ' now)' : ' (free)' );
+	}
+	echo '</select><p class="description">Choose and press Update. The delivery boy sees the order on his phone.</p>';
+}
+
+add_action( 'woocommerce_process_shop_order_meta', function ( $order_id ) {
+	if ( ! isset( $_POST['pcs_drv_nonce'] ) || ! wp_verify_nonce( $_POST['pcs_drv_nonce'], 'pcs_drv_box' ) || ! current_user_can( 'edit_shop_orders' ) ) {
+		return;
+	}
+	$o   = wc_get_order( $order_id );
+	$sel = sanitize_text_field( wp_unslash( $_POST['pcs_driver_sel'] ?? '' ) );
+	if ( ! $o ) {
+		return;
+	}
+	$by = wp_get_current_user()->display_name;
+	if ( 'auto' === $sel ) {
+		$o->delete_meta_data( '_pcs_driver' );
+		$o->delete_meta_data( '_pcs_issue' );
+		$o->save();
+		pcs_try_assign( wc_get_order( $order_id ) );
+	} elseif ( 'none' === $sel ) {
+		if ( pcs_order_driver( $o ) ) {
+			pcs_assign_to( $o, 0, $by );
+		}
+	} elseif ( pcs_is_driver( (int) $sel ) && pcs_order_driver( $o ) !== (int) $sel ) {
+		pcs_assign_to( $o, (int) $sel, $by );
+	}
+} );
+
+// Orders list: a "Delivery boy" column.
+$pcs_col = function ( $c ) {
+	$c['pcs_driver'] = 'Delivery boy';
+	return $c;
+};
+$pcs_show = function ( $order ) {
+	$d = pcs_order_driver( $order );
+	echo $d ? esc_html( get_userdata( $d ) ? get_userdata( $d )->display_name : '#' . $d ) . ( $order->get_meta( '_pcs_issue' ) ? ' ⚠' : '' ) : ( in_array( $order->get_status(), pcs_active_statuses(), true ) ? '<em>waiting</em>' : '' );
+};
+add_filter( 'manage_edit-shop_order_columns', $pcs_col );
+add_action( 'manage_shop_order_posts_custom_column', function ( $col, $id ) use ( $pcs_show ) {
+	if ( 'pcs_driver' === $col && ( $o = wc_get_order( $id ) ) ) {
+		$pcs_show( $o );
+	}
+}, 10, 2 );
+add_filter( 'woocommerce_shop_order_list_table_columns', $pcs_col );
+add_action( 'woocommerce_shop_order_list_table_custom_column', function ( $col, $order ) use ( $pcs_show ) {
+	if ( 'pcs_driver' === $col ) {
+		$pcs_show( $order );
+	}
+}, 10, 2 );
