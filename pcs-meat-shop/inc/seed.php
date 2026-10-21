@@ -115,7 +115,7 @@ function pcs_seed() {
 	$content = array(
 		'about-us'        => array( 'About Us', '' ),
 		'quality-hygiene' => array( 'Quality & Hygiene', '' ),
-		'contact-us'      => array( 'Contact', '[pcs_contact]' ),
+		'contact-us'      => array( 'Contact', '' ),
 		'cart'            => array( 'Cart', '[woocommerce_cart]' ),
 		'checkout'        => array( 'Checkout', '[woocommerce_checkout]' ),
 		'my-account'      => array( 'My Account', '[woocommerce_my_account]' ),

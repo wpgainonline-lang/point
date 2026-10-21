@@ -476,3 +476,34 @@ ul.woocommerce-order-overview{list-style:none;padding:0;display:flex;gap:20px;fl
 .q-cuts span{display:block;padding:10px 12px;font-weight:600;font-size:.92rem;line-height:1.25}
 .page-template-page-quality-hygiene .site-footer{margin-top:48px}
 @media(max-width:900px){.q-pillars .wrap{grid-template-columns:1fr}.q-pillars .wrap>div{border-right:0;border-bottom:1px solid #333}.q-split{grid-template-columns:1fr;gap:20px}.q-head{position:static}}
+
+/* contact page */
+.ct-hero .wrap{padding-top:48px;padding-bottom:88px;text-align:center}
+.ct-hero p{margin:0 auto}
+.ct-cards .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-56px;position:relative}
+.ct-card{background:#fff;border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:6px}
+.ct-card .ic{width:34px;height:34px;color:var(--red);margin-bottom:6px}
+.ct-card h3{margin:0;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ct-card .big{font-size:1.1rem;font-weight:700;margin:4px 0;line-height:1.4}
+.ct-card .big a{text-decoration:none}
+.ct-card .muted{margin:0 0 8px;flex:1}
+.ct-link{color:var(--red);font-weight:700;text-decoration:none;margin-top:auto}
+.ct-link:hover{text-decoration:underline}
+.ct-main{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.ct-form{margin:0;padding:32px}
+.ct-form h2{font-size:1.7rem}
+.ct-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ct-form .btn{min-width:180px}
+.ct-map{border:1px solid var(--line);min-height:420px;background:var(--soft)}
+.ct-map iframe{width:100%;height:100%;min-height:420px;border:0;display:block}
+.ct-bulk{background:var(--ink);color:#fff;padding:40px 0}
+.ct-bulk .wrap{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.ct-bulk h2{color:#fff;margin:0 0 6px}
+.ct-bulk p{margin:0;color:#ccc;max-width:60ch}
+.ct-bulk-btns{display:flex;gap:10px}
+.btn-ghost{background:transparent;color:#fff;border-color:#777}
+.btn-ghost:hover{background:#fff;color:var(--ink);border-color:#fff}
+.page-template-page-contact-us .site-footer{margin-top:0}
+@media(max-width:1000px){.ct-cards .wrap{grid-template-columns:1fr 1fr}.ct-main{grid-template-columns:1fr}}
+@media(max-width:560px){.ct-cards .wrap{grid-template-columns:1fr;margin-top:-40px}.ct-row{grid-template-columns:1fr}.ct-form{padding:20px}.ct-hero .wrap{padding-bottom:64px}}
+.page-template-page-contact-us .ab-cta{margin-top:0}

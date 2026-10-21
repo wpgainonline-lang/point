@@ -22,6 +22,7 @@ require PCS_DIR . 'inc/legacy.php';
 require PCS_DIR . 'inc/pagecontent.php';
 require PCS_DIR . 'inc/about.php';
 require PCS_DIR . 'inc/quality.php';
+require PCS_DIR . 'inc/contact.php';
 
 add_action( 'admin_notices', function () {
 	if ( ! class_exists( 'WooCommerce' ) && current_user_can( 'activate_plugins' ) ) {
