@@ -114,7 +114,7 @@ function pcs_seed() {
 	/* 2. Pages */
 	$content = array(
 		'about-us'        => array( 'About Us', '' ),
-		'quality-hygiene' => array( 'Quality & Hygiene', "<p>Meat is only as good as the way it is handled. At House of Cutts, cleanliness is not a one-time effort. It is the routine we follow before the shutter opens and after the last order goes out.</p><h2>Our chicken processing</h2><ol><li><strong>Carefully sourced.</strong> We source quality chicken from trusted suppliers and check it before processing.</li><li><strong>Hygienically processed.</strong> The chicken is cleaned and processed in a controlled, hygienic environment.</li><li><strong>Freshly chilled.</strong> The processed chicken is rapidly chilled to help maintain its freshness, texture and quality.</li><li><strong>Carefully cut.</strong> Our trained meat professionals prepare the cuts you need.</li><li><strong>Weighed and packed.</strong> Every portion is accurately weighed and hygienically packed.</li><li><strong>Kept chilled until you get it.</strong> The chicken remains under controlled chilled conditions through storage and delivery.</li></ol><h2>Come and see the counter yourself</h2><p>You are welcome to look at how the meat is stored, cut and packed before you order. Walk in any day, or call ahead and we will keep your cut ready.</p>" ),
+		'quality-hygiene' => array( 'Quality & Hygiene', '' ),
 		'contact-us'      => array( 'Contact', '[pcs_contact]' ),
 		'cart'            => array( 'Cart', '[woocommerce_cart]' ),
 		'checkout'        => array( 'Checkout', '[woocommerce_checkout]' ),

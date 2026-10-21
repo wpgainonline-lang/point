@@ -31,22 +31,11 @@ function pcs_about_defaults() {
 }
 
 function pcs_about( $key ) {
-	static $all = null;
-	if ( null === $all ) {
-		$all = wp_parse_args( array_filter( (array) get_option( 'pcs_about', array() ), function ( $v ) { return '' !== $v; } ), pcs_about_defaults() );
-	}
-	return $all[ $key ] ?? '';
+	return pcs_pc_get( 'pcs_about', pcs_about_defaults(), $key );
 }
 
 function pcs_about_lines( $key ) {
-	$out = array();
-	foreach ( preg_split( '/\r\n|\r|\n/', (string) pcs_about( $key ) ) as $l ) {
-		$l = trim( $l );
-		if ( '' !== $l ) {
-			$out[] = array_map( 'trim', explode( '|', $l, 2 ) );
-		}
-	}
-	return $out;
+	return pcs_pc_lines( 'pcs_about', pcs_about_defaults(), $key );
 }
 
 function pcs_about_fields() {
@@ -90,66 +79,10 @@ function pcs_about_fields() {
 
 add_action( 'admin_menu', function () {
 	add_submenu_page( 'pcs-settings', 'Settings', 'Settings', 'manage_options', 'pcs-settings', 'pcs_settings_page' );
-	add_submenu_page( 'pcs-settings', 'About page', 'About page', 'manage_options', 'pcs-about', 'pcs_about_admin' );
+	add_submenu_page( 'pcs-settings', 'About page', 'About page', 'manage_options', 'pcs-about', function () {
+		pcs_pc_admin( 'pcs_about', pcs_about_fields(), pcs_about_defaults(), 'About page', 'Edit the words and photos of the About Us page.', 'about-us' );
+	} );
 } );
-
-function pcs_about_admin() {
-	if ( ! current_user_can( 'manage_options' ) ) {
-		return;
-	}
-	wp_enqueue_media();
-	if ( isset( $_POST['pcs_about_nonce'] ) && wp_verify_nonce( $_POST['pcs_about_nonce'], 'pcs_about' ) ) {
-		$new = array();
-		foreach ( pcs_about_fields() as $group ) {
-			foreach ( $group as $k => $f ) {
-				$v         = isset( $_POST[ $k ] ) ? wp_unslash( $_POST[ $k ] ) : '';
-				$new[ $k ] = 'textarea' === $f[1] ? sanitize_textarea_field( $v ) : ( 'image' === $f[1] ? esc_url_raw( $v ) : sanitize_text_field( $v ) );
-			}
-		}
-		update_option( 'pcs_about', $new );
-		if ( function_exists( 'do_action' ) ) {
-			do_action( 'litespeed_purge_all' );
-		}
-		echo '<div class="notice notice-success"><p>Saved. <a href="' . esc_url( get_permalink( get_page_by_path( 'about-us' ) ) ) . '" target="_blank" rel="noopener">View the About page</a></p></div>';
-		echo '<script>setTimeout(function(){location.href=location.href},600)</script>';
-	}
-	$cur = wp_parse_args( array_filter( (array) get_option( 'pcs_about', array() ), function ( $v ) { return '' !== $v; } ), pcs_about_defaults() );
-	echo '<div class="wrap"><h1>About page</h1><p>Edit the words and photos of the About Us page. Clear a box and save to bring back the original text.</p><form method="post">';
-	wp_nonce_field( 'pcs_about', 'pcs_about_nonce' );
-	foreach ( pcs_about_fields() as $group => $fields ) {
-		echo '<h2>' . esc_html( $group ) . '</h2><table class="form-table">';
-		foreach ( $fields as $k => $f ) {
-			$v = $cur[ $k ] ?? '';
-			echo '<tr><th><label for="' . esc_attr( $k ) . '">' . esc_html( $f[0] ) . '</label></th><td>';
-			if ( 'textarea' === $f[1] ) {
-				echo '<textarea class="large-text" rows="' . ( in_array( $k, array( 'values', 'steps', 'stats' ), true ) ? 7 : 4 ) . '" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '">' . esc_textarea( $v ) . '</textarea>';
-			} elseif ( 'image' === $f[1] ) {
-				echo '<input class="regular-text pcs-img" type="text" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '"> <button type="button" class="button pcs-pick" data-target="' . esc_attr( $k ) . '">Choose image</button>';
-				echo '<div style="margin-top:8px">' . ( $v ? '<img src="' . esc_url( $v ) . '" style="max-width:240px;height:auto">' : '' ) . '</div>';
-			} else {
-				echo '<input class="large-text" type="text" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '">';
-			}
-			if ( ! empty( $f[2] ) ) {
-				echo '<p class="description">' . esc_html( $f[2] ) . '</p>';
-			}
-			echo '</td></tr>';
-		}
-		echo '</table>';
-	}
-	echo '<p><button class="button button-primary">Save About page</button></p></form></div>';
-	?>
-	<script>
-	jQuery(function($){
-		$('.pcs-pick').on('click',function(e){
-			e.preventDefault();var t=$('#'+$(this).data('target'));
-			var f=wp.media({title:'Choose image',multiple:false,library:{type:'image'}});
-			f.on('select',function(){t.val(f.state().get('selection').first().toJSON().url);});
-			f.open();
-		});
-	});
-	</script>
-	<?php
-}
 
 /** Image for a section: the chosen one, else a product photo. */
 function pcs_about_image( $key, $fallback_index = 0 ) {
