@@ -19,6 +19,7 @@ require PCS_DIR . 'inc/settings.php';
 require PCS_DIR . 'inc/otp.php';
 require PCS_DIR . 'inc/seed.php';
 require PCS_DIR . 'inc/legacy.php';
+require PCS_DIR . 'inc/about.php';
 
 add_action( 'admin_notices', function () {
 	if ( ! class_exists( 'WooCommerce' ) && current_user_can( 'activate_plugins' ) ) {
