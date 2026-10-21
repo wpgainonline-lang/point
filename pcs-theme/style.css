@@ -7,7 +7,7 @@ Requires PHP: 7.4
 :root{--red:#c8102e;--ink:#1c1c1c;--muted:#6b6b6b;--line:#e6e6e6;--soft:#f7f7f7;--ok:#1e7a3c;--max:1400px}
 *{box-sizing:border-box;border-radius:0;box-shadow:none;text-shadow:none}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fff}
+body{margin:0;font:18px/1.5 'Afacad',system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fff}
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 h1,h2,h3{line-height:1.2;margin:0 0 .6em}
@@ -26,8 +26,8 @@ p{margin:0 0 1em}
 .logo{font-weight:800;font-size:1.45rem;text-decoration:none;color:var(--red);letter-spacing:-.02em;white-space:nowrap;display:block;flex:none;position:relative;width:138px;height:76px}
 .logo img{position:absolute;left:0;top:3px;height:96px;width:auto;max-width:none;z-index:22}
 .nav{display:flex;gap:6px;align-items:stretch;margin:0 auto}
-.nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 14px;text-decoration:none;font-weight:700;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;border-bottom:2px solid transparent;color:var(--ink)}
-.nav a .ic{width:26px;height:26px}
+.nav a{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;padding:11px 14px 6px;text-decoration:none;font-weight:700;font-size:.8rem;letter-spacing:.04em;text-transform:uppercase;border-bottom:2px solid transparent;color:var(--ink)}
+.nav a .ic,.nav a .nv-img{width:28px;height:28px;display:block;object-fit:contain}
 .nav a:hover,.nav .on{color:var(--red);border-bottom-color:var(--red)}
 .pill{display:flex;align-items:center;gap:10px;background:var(--red);color:#fff;text-decoration:none;padding:8px 16px;font-weight:800;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;line-height:1.15;white-space:nowrap}
 .pill:hover{background:#a50d26}
@@ -286,7 +286,7 @@ dl .tot{border-top:1px solid var(--line);font-weight:800;font-size:1.15rem;margi
  .nav{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;flex-direction:column;gap:0;padding:4px 16px 8px;border-bottom:1px solid var(--line);z-index:25;margin:0}
  .nav.open{display:flex}
  .nav a{flex-direction:row;justify-content:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:.85rem}
- .nav a .ic{width:22px;height:22px}
+ .nav a .ic,.nav a .nv-img{width:26px;height:26px}
  .sbar{padding:10px 0}
 }
 @media(max-width:800px){

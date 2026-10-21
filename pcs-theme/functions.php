@@ -13,6 +13,7 @@ add_action( 'after_setup_theme', function () {
 } );
 
 add_action( 'wp_enqueue_scripts', function () {
+	wp_enqueue_style( 'pcs-font', 'https://fonts.googleapis.com/css2?family=Afacad:wght@400..700&display=swap', array(), null );
 	wp_enqueue_style( 'pcs-fresh', get_stylesheet_uri(), array(), (string) filemtime( get_stylesheet_directory() . '/style.css' ) );
 } );
 
@@ -37,11 +38,19 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_dequeue_style( 'wc-blocks-vendors-style' );
 }, 100 );
 
+add_filter( 'wp_resource_hints', function ( $urls, $rel ) {
+	if ( 'preconnect' === $rel ) {
+		$urls[] = 'https://fonts.googleapis.com';
+		$urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' => 'anonymous' );
+	}
+	return $urls;
+}, 10, 2 );
+
 function pcs_theme_nav() {
 	$items = array(
 		array( 'Home', home_url( '/' ), 'home' ),
-		array( 'Chicken', get_term_link( 'chicken', 'product_cat' ), 'chicken' ),
-		array( 'Mutton', get_term_link( 'mutton', 'product_cat' ), 'mutton' ),
+		array( 'Chicken', get_term_link( 'chicken', 'product_cat' ), 'chicken', pcs_opt( 'nav_icon_chicken' ) ),
+		array( 'Mutton', get_term_link( 'mutton', 'product_cat' ), 'mutton', pcs_opt( 'nav_icon_mutton' ) ),
 		array( 'About', pcs_page_url( 'about-us' ), 'info' ),
 		array( 'Quality', pcs_page_url( 'quality-hygiene' ), 'shield' ),
 		array( 'Contact', pcs_page_url( 'contact-us' ), 'phone' ),
@@ -51,7 +60,7 @@ function pcs_theme_nav() {
 		if ( is_wp_error( $i[1] ) ) {
 			continue;
 		}
-		echo '<a href="' . esc_url( $i[1] ) . '"' . ( untrailingslashit( $i[1] ) === untrailingslashit( $cur ) ? ' class="on"' : '' ) . '>' . pcs_icon( $i[2] ) . '<span>' . esc_html( $i[0] ) . '</span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '<a href="' . esc_url( $i[1] ) . '"' . ( untrailingslashit( $i[1] ) === untrailingslashit( $cur ) ? ' class="on"' : '' ) . '>' . ( ! empty( $i[3] ) ? '<img class="nv-img" src="' . esc_url( $i[3] ) . '" alt="" width="32" height="32">' : pcs_icon( $i[2] ) ) . '<span>' . esc_html( $i[0] ) . '</span></a>'; // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 }
 
