@@ -507,3 +507,31 @@ ul.woocommerce-order-overview{list-style:none;padding:0;display:flex;gap:20px;fl
 @media(max-width:1000px){.ct-cards .wrap{grid-template-columns:1fr 1fr}.ct-main{grid-template-columns:1fr}}
 @media(max-width:560px){.ct-cards .wrap{grid-template-columns:1fr;margin-top:-40px}.ct-row{grid-template-columns:1fr}.ct-form{padding:20px}.ct-hero .wrap{padding-bottom:64px}}
 .page-template-page-contact-us .ab-cta{margin-top:0}
+
+/* compact home hero */
+.hero3{background:#fdf1f2;border-bottom:1px solid var(--line)}
+.hero3-in{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;padding-top:22px;padding-bottom:22px}
+.hero3 h1{font-size:clamp(1.55rem,3vw,2.3rem);letter-spacing:-.03em;margin:0 0 .2em;line-height:1.15}
+.hero3 p{margin:0 0 14px;color:#444;font-size:1.02rem}
+.hero3 .kicker{margin-bottom:6px}
+.hero3-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start}
+.hero3-row .btn{padding:10px 18px}
+.hero3-row .pin-check{margin-left:10px;padding-left:18px;border-left:1px solid #e8c9cd}
+.hero3-row .pin-check input{width:150px;padding:10px 12px}
+.hero3-row .pin-check .msg{flex-basis:100%;margin:2px 0 0}
+.hero3-row .pin-check .msg:empty{display:none}
+.hero3-tiles{display:grid;grid-template-columns:repeat(2,170px);gap:12px}
+.h-tile{position:relative;display:block;background:#fff;border:1px solid #efd3d6;text-decoration:none;overflow:hidden}
+.h-tile img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;transition:transform .25s}
+.h-tile:hover img{transform:scale(1.04)}
+.h-tile span{position:absolute;left:0;bottom:0;background:var(--red);color:#fff;font-weight:700;font-size:.85rem;padding:6px 12px}
+@media(max-width:900px){
+ .hero3-in{grid-template-columns:1fr;gap:14px;padding-top:16px;padding-bottom:16px}
+ .hero3-tiles{grid-template-columns:1fr 1fr;gap:10px}
+ .h-tile img{aspect-ratio:16/9;object-fit:contain}
+ .hero3-row .pin-check{margin-left:0;padding-left:0;border-left:0;flex-basis:100%}
+ .hero3-row .pin-check{flex-wrap:wrap}
+ .hero3-row .pin-check input{flex:1;width:auto;min-width:0}
+ .hero3 p,.hero3 .kicker{display:none}
+ .hero3-row .btn{flex:1}
+}

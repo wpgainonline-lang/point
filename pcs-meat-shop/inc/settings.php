@@ -26,6 +26,8 @@ function pcs_defaults() {
 		'banners'       => '',
 		'usps'          => "Fresh & chilled|Never frozen, kept cold from cut to doorstep\nHygienic cuts|Cleaned, cut and packed in a hygienic counter\nCut your way|Curry, biryani, boneless and more\nChennai delivery|Pick a slot that suits you",
 		'offer'         => '',
+		'hero_img_chicken' => '',
+		'hero_img_mutton'  => '',
 		'testimonials'  => "Arun Kumar|Chennai|Really impressed with the quality from House of Cutts. The meat was fresh and juicy, and the cuts were exactly as requested. Packaging was neat and secure, which made the whole order feel very hygienic and premium. Definitely ordering again.\nSuresh Reddy|Chennai|Excellent meat quality. The cuts were fresh, tender and nicely prepared. I really liked the packaging because everything arrived clean and properly packed. The pieces were also cut to the right size for cooking. Very good experience.\nPriya Sharma|Chennai|Loved the chicken quality. The pieces were fresh, juicy and properly cleaned. The boneless cuts were evenly prepared, which made cooking much easier. Packaging was also very neat with no unnecessary mess. House of Cutts is now my go-to.\nMohammed Imran|Chennai|Very happy with the cutting quality. The curry pieces were perfectly sized and the meat was fresh and juicy. Everything was packed properly and looked hygienic. The staff also understood my cutting requirement perfectly. Great service overall.\nRahul Verma|Chennai|Fresh meat, clean cutting and really good packaging. The pieces looked fresh and had a great texture. I also liked that there was very little unnecessary waste. Everything was prepared with care. Highly recommended for anyone looking for quality cuts.\nKarthik Raj|Chennai|One of the better meat shopping experiences I have had in Chennai. The cuts were fresh, juicy and prepared exactly as requested. The quantity was properly packed and the packaging looked clean and professional. Will definitely order from House of Cutts again.",
 	);
 }
@@ -98,6 +100,8 @@ function pcs_fields() {
 			'otp_template' => array( 'OTP template id', 'text', 'MSG91 template id, or 2Factor template name (optional).' ),
 		),
 		'Home page'     => array(
+			'hero_img_chicken' => array( 'Hero photo: Chicken', 'image', 'Shown in the top section of the home page. Leave empty to use a product photo.' ),
+			'hero_img_mutton'  => array( 'Hero photo: Mutton', 'image', 'Leave empty to use a product photo.' ),
 			'banners' => array( 'Banners', 'textarea', 'One per line: image URL|Title|Subtitle|Link' ),
 			'usps'    => array( 'Highlights strip', 'textarea', 'One per line: Title|Text' ),
 			'testimonials' => array( 'Customer reviews', 'textarea', 'One per line: Name|City|Review text. Shown as a carousel on the home page.' ),
@@ -112,6 +116,7 @@ function pcs_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
+	wp_enqueue_media();
 	if ( isset( $_POST['pcs_nonce'] ) && wp_verify_nonce( $_POST['pcs_nonce'], 'pcs_save' ) ) {
 		$new = array();
 		foreach ( pcs_fields() as $group ) {
@@ -119,6 +124,8 @@ function pcs_settings_page() {
 				$v = isset( $_POST[ $k ] ) ? wp_unslash( $_POST[ $k ] ) : '';
 				if ( 'checkbox' === $f[1] ) {
 					$v = empty( $_POST[ $k ] ) ? 0 : 1;
+				} elseif ( 'image' === $f[1] ) {
+					$v = esc_url_raw( $v );
 				} elseif ( 'number' === $f[1] ) {
 					$v = max( 0, (float) $v );
 				} elseif ( 'textarea' === $f[1] ) {
@@ -145,6 +152,9 @@ function pcs_settings_page() {
 				echo '<textarea class="large-text" rows="5" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '">' . esc_textarea( $v ) . '</textarea>';
 			} elseif ( 'checkbox' === $f[1] ) {
 				echo '<input type="checkbox" name="' . esc_attr( $k ) . '" value="1" ' . checked( $v, 1, false ) . '>';
+			} elseif ( 'image' === $f[1] ) {
+				echo '<input class="regular-text" type="text" name="' . esc_attr( $k ) . '" id="' . esc_attr( $k ) . '" value="' . esc_attr( $v ) . '"> <button type="button" class="button pcs-pick" data-target="' . esc_attr( $k ) . '">Choose image</button>';
+				echo '<div style="margin-top:8px">' . ( $v ? '<img src="' . esc_url( $v ) . '" style="max-width:160px;height:auto">' : '' ) . '</div>';
 			} elseif ( 'select' === $f[1] ) {
 				echo '<select name="' . esc_attr( $k ) . '">';
 				foreach ( $f[2] as $ov => $ol ) {
@@ -165,6 +175,7 @@ function pcs_settings_page() {
 		echo '<p><strong>Last test OTP:</strong> <code>' . esc_html( get_option( 'pcs_test_otp', '-' ) ) . '</code></p>';
 	}
 	echo '<p><button class="button button-primary">Save settings</button></p></form>';
+	echo '<script>jQuery(function($){$(".pcs-pick").on("click",function(e){e.preventDefault();var t=$("#"+$(this).data("target"));var f=wp.media({title:"Choose image",multiple:false,library:{type:"image"}});f.on("select",function(){t.val(f.state().get("selection").first().toJSON().url);});f.open();});});</script>';
 	echo '<h2>Demo data</h2><p>Set up WooCommerce for the meat shop and bring over the products (safe to run again).</p>';
 	echo '<form method="post">' . wp_nonce_field( 'pcs_seed', 'pcs_seed_nonce', true, false ) . '<button class="button" name="pcs_seed" value="1">Run setup &amp; import products</button></form></div>';
 }

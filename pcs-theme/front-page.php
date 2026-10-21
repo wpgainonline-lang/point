@@ -16,23 +16,32 @@ foreach ( array( 'chicken', 'mutton' ) as $slug ) {
 }
 $offer   = pcs_opt( 'offer' );
 ?>
-<section class="hero2">
-	<div class="wrap hero2-in">
-		<div class="hero2-txt">
+<?php
+$hero_img = array();
+foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $label ) {
+	$term = get_term_by( 'slug', $slug, 'product_cat' );
+	$url  = pcs_opt( 'hero_img_' . $slug );
+	if ( ! $url && ! empty( $by_cat[ $slug ][0] ) ) {
+		$url = get_the_post_thumbnail_url( $by_cat[ $slug ][0], 'medium' );
+	}
+	$hero_img[ $slug ] = array( 'label' => $label, 'url' => $url, 'link' => $term ? get_term_link( $term ) : wc_get_page_permalink( 'shop' ) );
+}
+?>
+<section class="hero3">
+	<div class="wrap hero3-in">
+		<div class="hero3-txt">
 			<span class="kicker">Fresh · Chilled · Hygienic</span>
-			<h1>Fresh chicken &amp; mutton,<br>cut your way.</h1>
+			<h1>Fresh chicken &amp; mutton, cut your way.</h1>
 			<p>Proper cuts, honest weight and cold-chain delivery to your door in <?php echo esc_html( pcs_opt( 'city' ) ); ?>.</p>
-			<div class="hero2-cta">
-				<?php foreach ( $cats as $t ) : ?><a class="btn" href="<?php echo esc_url( get_term_link( $t ) ); ?>">Shop <?php echo esc_html( $t->name ); ?></a><?php endforeach; ?>
+			<div class="hero3-row">
+				<?php foreach ( $hero_img as $h ) : ?><a class="btn" href="<?php echo esc_url( $h['link'] ); ?>">Shop <?php echo esc_html( $h['label'] ); ?></a><?php endforeach; ?>
+				<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Delivery pincode" aria-label="Delivery pincode"><button class="btn btn-dark" type="submit">Check</button><span class="msg" role="status"></span></form>
 			</div>
 		</div>
-		<div class="hero2-card">
-			<strong>Check delivery in your area</strong>
-			<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" aria-label="Pincode"><button class="btn btn-dark" type="submit">Check</button><span class="msg" role="status"></span></form>
-			<ul class="chips"><li>Cash on delivery</li><li>Choose your time slot</li><li>Cut as you like</li></ul>
-			<div class="hero2-pics">
-				<?php foreach ( array_slice( $mosaic, 0, 4 ) as $p ) : ?><a href="<?php echo esc_url( get_permalink( $p ) ); ?>" title="<?php echo esc_attr( $p->post_title ); ?>"><?php echo get_the_post_thumbnail( $p, 'thumbnail', array( 'loading' => 'eager', 'alt' => esc_attr( $p->post_title ) ) ); ?></a><?php endforeach; ?>
-			</div>
+		<div class="hero3-tiles">
+			<?php foreach ( $hero_img as $h ) : ?>
+			<a class="h-tile" href="<?php echo esc_url( $h['link'] ); ?>"><?php if ( $h['url'] ) : ?><img src="<?php echo esc_url( $h['url'] ); ?>" alt="<?php echo esc_attr( $h['label'] ); ?>" width="170" height="170" fetchpriority="high"><?php endif; ?><span><?php echo esc_html( $h['label'] ); ?> <b>&rarr;</b></span></a>
+			<?php endforeach; ?>
 		</div>
 	</div>
 </section>

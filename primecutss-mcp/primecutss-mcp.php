@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Primecutss MCP
  * Description: Exposes an MCP (Model Context Protocol) endpoint so an AI assistant can manage this WordPress site: content, menus, CSS, options, plugins, themes and files.
- * Version: 0.4.0
+ * Version: 0.5.0
  * Requires PHP: 7.4
  */
 
@@ -70,7 +70,7 @@ final class Primecutss_MCP {
 				return self::rpc_result( $id, array(
 					'protocolVersion' => '2025-03-26',
 					'capabilities'    => array( 'tools' => new stdClass() ),
-					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.4.0' ),
+					'serverInfo'      => array( 'name' => 'primecutss-mcp', 'version' => '0.5.0' ),
 					'instructions'    => 'WordPress site ' . home_url() . '. Tools edit the LIVE site. File paths are relative to wp-content. File writes are backed up; use list_backups/restore_backup to undo.',
 				) );
 			case 'ping':
@@ -162,6 +162,7 @@ final class Primecutss_MCP {
 			self::t( 'list_backups', 'List file backups (newest first).' ),
 			self::t( 'restore_backup', 'Restore a backup by its id from list_backups.', array( 'id' => $s ), array( 'id' ) ),
 			self::t( 'clear_cache', 'Flush object cache and rewrite rules.' ),
+			self::t( 'upload_media', 'Add an image (base64, up to 5 MB) to the Media Library. Returns its id and url.', array( 'filename' => $s, 'base64' => $s, 'title' => $s ), array( 'filename', 'base64' ) ),
 			self::t( 'install_plugin', 'Install a free plugin from wordpress.org by slug (e.g. woocommerce). Does not activate it.', array( 'slug' => $s ), array( 'slug' ) ),
 			self::t( 'run_action', 'Run a whitelisted maintenance action registered by another plugin (e.g. pcs_seed).', array( 'name' => $s ), array( 'name' ) ),
 			self::t( 'get_log', 'Recent tool calls made through this endpoint.' ),
@@ -345,6 +346,26 @@ final class Primecutss_MCP {
 		self::purge();
 		flush_rewrite_rules();
 		return array( 'ok' => true );
+	}
+
+	private static function tool_upload_media( $a ) {
+		self::require_writes();
+		$name = sanitize_file_name( (string) ( $a['filename'] ?? '' ) );
+		$data = base64_decode( (string) ( $a['base64'] ?? '' ), true );
+		if ( '' === $name || ! $data || strlen( $data ) > 5 * 1024 * 1024 ) {
+			throw new Exception( 'A filename and valid base64 data (max 5 MB) are required.' );
+		}
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+		$tmp = wp_tempnam( $name );
+		file_put_contents( $tmp, $data );
+		$id = media_handle_sideload( array( 'name' => $name, 'tmp_name' => $tmp ), 0, isset( $a['title'] ) ? sanitize_text_field( $a['title'] ) : null );
+		if ( is_wp_error( $id ) ) {
+			@unlink( $tmp ); // phpcs:ignore
+			throw new Exception( $id->get_error_message() );
+		}
+		return array( 'id' => $id, 'url' => wp_get_attachment_url( $id ) );
 	}
 
 	private static function tool_install_plugin( $a ) {
