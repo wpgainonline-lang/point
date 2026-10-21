@@ -211,3 +211,10 @@ add_action( 'woocommerce_review_order_after_submit', function () {
 	echo '<ul class="co-trust"><li>' . pcs_icon( 'snow' ) . ' Fresh &amp; chilled, cut your way</li><li>' . pcs_icon( 'cash' ) . ' Pay when your order arrives</li><li>' . pcs_icon( 'bike' ) . ' Delivered in your chosen slot</li></ul>'; // phpcs:ignore WordPress.Security.EscapeOutput
 } );
 
+
+
+/* Whole rupees everywhere in WooCommerce, and never WooCommerce's "coming soon" screen on store pages. */
+add_filter( 'wc_get_price_decimals', '__return_zero' );
+add_filter( 'pre_option_woocommerce_coming_soon', function () {
+	return 'no';
+} );

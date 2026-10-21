@@ -674,3 +674,6 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .woocommerce-checkout .product-quantity{display:none}
 .cq{color:var(--red);font-weight:800;white-space:nowrap}
 .pcs-slot abbr{text-decoration:none;color:var(--red);border:0}
+.woocommerce-checkout table.shop_table dl.variation{margin:-2px 0 0 64px}
+.woocommerce-checkout table.shop_table dl.variation dd p,.woocommerce-checkout table.shop_table dl.variation dt{margin:0}
+.woocommerce-checkout table.shop_table td.product-name{padding-bottom:10px}
