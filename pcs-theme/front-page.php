@@ -34,13 +34,15 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 			<h1>Fresh chicken &amp; mutton, cut your way.</h1>
 			<p>Proper cuts, honest weight and cold-chain delivery to your door in <?php echo esc_html( pcs_opt( 'city' ) ); ?>.</p>
 			<div class="hero3-row">
-				<?php foreach ( $hero_img as $h ) : ?><a class="btn" href="<?php echo esc_url( $h['link'] ); ?>">Shop <?php echo esc_html( $h['label'] ); ?></a><?php endforeach; ?>
-				<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Delivery pincode" aria-label="Delivery pincode"><button class="btn btn-dark" type="submit">Check</button><span class="msg" role="status"></span></form>
+				<form class="pin-check"><label class="pin-lbl" for="hero-pin">Check delivery in your area</label><div class="pin-in"><input id="hero-pin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode"><button class="btn btn-dark" type="submit">Check</button></div><span class="msg" role="status"></span></form>
 			</div>
 		</div>
 		<div class="hero3-tiles">
 			<?php foreach ( $hero_img as $h ) : ?>
-			<a class="h-tile" href="<?php echo esc_url( $h['link'] ); ?>"><?php if ( $h['url'] ) : ?><img src="<?php echo esc_url( $h['url'] ); ?>" alt="<?php echo esc_attr( $h['label'] ); ?>" width="170" height="170" fetchpriority="high"><?php endif; ?><span><?php echo esc_html( $h['label'] ); ?> <b>&rarr;</b></span></a>
+			<div class="h-col">
+				<a class="h-tile" href="<?php echo esc_url( $h['link'] ); ?>" aria-label="Shop <?php echo esc_attr( $h['label'] ); ?>"><?php if ( $h['url'] ) : ?><img src="<?php echo esc_url( $h['url'] ); ?>" alt="<?php echo esc_attr( $h['label'] ); ?>" width="170" height="170" fetchpriority="high"><?php endif; ?></a>
+				<a class="btn btn-block" href="<?php echo esc_url( $h['link'] ); ?>">Shop <?php echo esc_html( $h['label'] ); ?></a>
+			</div>
 			<?php endforeach; ?>
 		</div>
 	</div>
