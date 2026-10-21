@@ -16,6 +16,7 @@ define( 'PCS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'PCS_URL', plugin_dir_url( __FILE__ ) );
 
 require PCS_DIR . 'inc/settings.php';
+require PCS_DIR . 'inc/login.php';
 require PCS_DIR . 'inc/otp.php';
 require PCS_DIR . 'inc/seed.php';
 require PCS_DIR . 'inc/legacy.php';
