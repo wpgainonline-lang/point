@@ -102,12 +102,21 @@ function pcs_slot_options() {
 	return $o;
 }
 
-// Render the slot block after the billing fields.
+// Slot picker: chips grouped by day, shown after the delivery fields.
 add_action( 'woocommerce_after_checkout_billing_form', function () {
-	$fields = WC()->checkout()->get_checkout_fields( 'pcs' );
-	echo '<div class="pcs-slot">';
-	foreach ( $fields as $k => $f ) {
-		woocommerce_form_field( $k, $f, WC()->checkout()->get_value( $k ) );
+	$days  = pcs_slots_for_days();
+	$first = true;
+	echo '<div class="pcs-slot"><h3>Delivery slot <abbr class="required" title="required">*</abbr></h3>';
+	foreach ( $days as $d ) {
+		echo '<p class="day">' . esc_html( $d['label'] . ' · ' . wp_date( 'D, j M', strtotime( $d['date'] ) ) ) . '</p><div class="slots">';
+		if ( ! $d['slots'] ) {
+			echo '<span class="muted">No more slots today.</span>';
+		}
+		foreach ( $d['slots'] as $sl ) {
+			echo '<label class="chip"><input type="radio" name="pcs_slot" value="' . esc_attr( $d['date'] . '|' . $sl ) . '"' . ( $first ? ' checked' : '' ) . '><span>' . esc_html( $sl ) . '</span></label>';
+			$first = false;
+		}
+		echo '</div>';
 	}
 	echo '</div>';
 } );
@@ -157,9 +166,12 @@ add_action( 'woocommerce_checkout_update_user_meta', function ( $user_id, $data 
 
 add_filter( 'woocommerce_checkout_must_be_logged_in_message', '__return_empty_string' );
 add_action( 'woocommerce_before_checkout_form', function () {
-	if ( ! is_user_logged_in() ) {
-		echo pcs_login_box( true ); // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( is_user_logged_in() ) {
+		return;
 	}
+	$p = pcs_cart_payload();
+	echo '<div class="co-guest"><div>' . pcs_login_box( true ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+	echo '<aside class="co-sum panel"><h3>Your order</h3>' . $p['lines'] . $p['foot'] . '<p class="muted">Login to choose your delivery slot and place the order.</p></aside></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }, 5 );
 add_filter( 'woocommerce_account_menu_items', function ( $items ) {
 	unset( $items['downloads'], $items['edit-address'], $items['edit-account'] );
@@ -175,3 +187,27 @@ add_filter( 'gettext', function ( $t, $text ) {
 	}
 	return $t;
 }, 10, 2 );
+
+
+/* ---------------- checkout page look: steps, thumbnails, payment, trust ---------------- */
+
+add_action( 'woocommerce_before_checkout_form', function () {
+	echo '<ol class="co-steps"><li class="done"><b>✓</b> Cart</li><li class="on"><b>2</b> ' . ( is_user_logged_in() ? 'Delivery &amp; payment' : 'Login' ) . '</li><li><b>3</b> Order placed</li></ol>';
+}, 1 );
+
+add_filter( 'woocommerce_cart_item_name', function ( $name, $item ) {
+	if ( ! is_checkout() ) {
+		return $name;
+	}
+	$img = get_the_post_thumbnail_url( $item['product_id'], 'thumbnail' );
+	return '<span class="ci">' . ( $img ? '<img src="' . esc_url( $img ) . '" alt="" width="52" height="52">' : '' ) . '<span class="cn">' . wp_kses_post( $name ) . ' <b class="cq">× ' . (int) $item['quantity'] . '</b></span></span>';
+}, 10, 2 );
+
+add_action( 'woocommerce_review_order_before_payment', function () {
+	echo '<h3 class="pay-h">Payment</h3>';
+} );
+
+add_action( 'woocommerce_review_order_after_submit', function () {
+	echo '<ul class="co-trust"><li>' . pcs_icon( 'snow' ) . ' Fresh &amp; chilled, cut your way</li><li>' . pcs_icon( 'cash' ) . ' Pay when your order arrives</li><li>' . pcs_icon( 'bike' ) . ' Delivered in your chosen slot</li></ul>'; // phpcs:ignore WordPress.Security.EscapeOutput
+} );
+
