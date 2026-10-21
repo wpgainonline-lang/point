@@ -37,6 +37,7 @@ add_action( 'plugins_loaded', function () {
 		require PCS_DIR . 'inc/checkout.php';
 		require PCS_DIR . 'inc/orders.php';
 		require PCS_DIR . 'inc/shortcodes.php';
+		require PCS_DIR . 'inc/staff.php';
 	}
 }, 20 );
 
@@ -82,12 +83,12 @@ add_action( 'template_redirect', function () {
 
 // Keep staff logged-in screens out of reach of customers.
 add_action( 'admin_init', function () {
-	if ( wp_doing_ajax() || ! is_user_logged_in() || current_user_can( 'edit_posts' ) ) {
+	if ( wp_doing_ajax() || ! is_user_logged_in() || current_user_can( 'edit_posts' ) || current_user_can( 'manage_woocommerce' ) ) {
 		return;
 	}
 	wp_safe_redirect( home_url( '/' ) );
 	exit;
 } );
 add_filter( 'show_admin_bar', function ( $s ) {
-	return current_user_can( 'edit_posts' ) ? $s : false;
+	return ( current_user_can( 'edit_posts' ) || current_user_can( 'manage_woocommerce' ) ) ? $s : false;
 } );
