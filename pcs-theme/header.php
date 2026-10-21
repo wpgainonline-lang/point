@@ -10,7 +10,7 @@
 <header class="site-header">
 	<div class="hd">
 		<button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false" aria-label="Menu" onclick="var n=document.getElementById('nav');n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'))"><?php echo pcs_icon( 'menu' ); // phpcs:ignore ?></button>
-		<a class="logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php if ( pcs_opt( 'logo' ) ) : ?><img src="<?php echo esc_url( pcs_opt( 'logo' ) ); ?>" alt="<?php echo esc_attr( pcs_opt( 'store_name' ) ); ?>" width="97" height="66"><?php else : echo esc_html( pcs_opt( 'store_name' ) ); endif; ?></a>
+		<a class="logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php if ( pcs_opt( 'logo' ) ) : ?><img src="<?php echo esc_url( pcs_opt( 'logo' ) ); ?>" alt="<?php echo esc_attr( pcs_opt( 'store_name' ) ); ?>" width="141" height="96"><?php else : echo esc_html( pcs_opt( 'store_name' ) ); endif; ?></a>
 		<nav class="nav" id="nav" aria-label="Main"><?php pcs_theme_nav(); ?></nav>
 		<a class="pill" href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) ) ); ?>"><?php echo pcs_icon( 'phone' ); // phpcs:ignore ?><span>Call to order<small><?php echo esc_html( pcs_opt( 'phone' ) ); ?></small></span></a>
 		<div class="hd-actions">
