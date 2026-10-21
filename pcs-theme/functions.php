@@ -51,7 +51,7 @@ function pcs_theme_nav() {
 		array( 'Home', home_url( '/' ), 'home' ),
 		array( 'Chicken', get_term_link( 'chicken', 'product_cat' ), 'chicken', pcs_opt( 'nav_icon_chicken' ) ),
 		array( 'Mutton', get_term_link( 'mutton', 'product_cat' ), 'mutton', pcs_opt( 'nav_icon_mutton' ) ),
-		array( 'About', pcs_page_url( 'about-us' ), 'info' ),
+		array( 'About', pcs_page_url( 'about-us' ), 'store' ),
 		array( 'Quality', pcs_page_url( 'quality-hygiene' ), 'shield' ),
 		array( 'Contact', pcs_page_url( 'contact-us' ), 'phone' ),
 	);
@@ -82,6 +82,7 @@ function pcs_icon( $name ) {
 		'user'  => '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
 		'chicken' => '<g transform="rotate(45 12 12)"><ellipse cx="12" cy="8" rx="4.6" ry="6"/><path d="M12 14v5.5"/><circle cx="10.5" cy="20.8" r="1.3"/><circle cx="13.5" cy="20.8" r="1.3"/></g>',
 		'mutton' => '<path d="M4.5 12C4.5 7 8.5 4 14 4c4 0 6.5 2 6.5 5 0 5-4.500 11-9.500 11-4 0-6.500-3-6.500-8z"/><circle cx="14" cy="10" r="2.300"/>',
+		'store' => '<path d="M3 9l2-5h14l2 5"/><path d="M3 9c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3"/><path d="M5 12.5V20h14v-7.5"/><path d="M10 20v-4.5h4V20"/>',
 		'info'  => '<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/>',
 		'menu'  => '<path d="M4 7h16M4 12h16M4 17h16"/>',
 		'star'  => '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
