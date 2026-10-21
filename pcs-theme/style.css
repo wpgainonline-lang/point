@@ -586,3 +586,21 @@ ul.woocommerce-order-overview{list-style:none;padding:0;display:flex;gap:20px;fl
 .faq-item[open] .pm:after{transform:rotate(0)}
 .faq-item p{margin:0;padding:0 20px 20px;color:#444;font-size:1.05rem;line-height:1.6}
 @media(max-width:900px){.faq-grid{grid-template-columns:1fr}.rev-sec .rcard{padding:26px 22px 20px}}
+
+/* add-to-cart pop-up */
+#pcs-pop{position:fixed;left:50%;bottom:22px;transform:translate(-50%,24px);width:min(460px,calc(100% - 24px));background:#fff;border:1px solid #dcdcdc;border-top:4px solid var(--ok);border-radius:10px;padding:16px 16px 14px;z-index:70;opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease}
+#pcs-pop.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#pcs-pop .pp-x{position:absolute;right:8px;top:4px;background:none;border:0;font-size:1.6rem;line-height:1;color:#888;cursor:pointer;padding:4px 8px}
+#pcs-pop .pp-x:hover{color:var(--red)}
+#pcs-pop .pp-row{display:flex;gap:14px;align-items:center;padding-right:22px}
+#pcs-pop .pp-row img{width:64px;height:64px;object-fit:cover;border-radius:6px;flex:none;background:var(--soft)}
+#pcs-pop .pp-ok{width:64px;height:64px;background:#e8f6ec;color:var(--ok);font-size:2rem;display:flex;align-items:center;justify-content:center;border-radius:6px;flex:none}
+#pcs-pop .pp-txt{display:flex;flex-direction:column;gap:2px;min-width:0}
+#pcs-pop .pp-txt strong{color:var(--ok);font-size:1.05rem}
+#pcs-pop .pp-nm{font-weight:700;font-size:1.08rem;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pcs-pop .pp-sum{color:var(--muted);font-size:.95rem}
+#pcs-pop .pp-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+#pcs-pop .btn{border-radius:6px;padding:11px 10px;font-size:1.05rem}
+#pcs-toast{border-radius:8px}
+@media(max-width:800px){#pcs-pop{bottom:70px}}
+@media(max-width:800px){.card .row{flex-direction:column;align-items:stretch;gap:6px}.card .sel-w{width:100%}}

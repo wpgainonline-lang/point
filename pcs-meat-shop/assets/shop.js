@@ -42,11 +42,32 @@
 		clearTimeout(tt); tt = setTimeout(function () { t.className = ''; }, 2600);
 	}
 
-	function add(id, g, cut, q, btn) {
+	/* "Added to cart" pop-up with View cart + Checkout */
+	var popT;
+	function popup(info, p) {
+		var el = $('#pcs-pop');
+		if (!el) {
+			el = document.createElement('div'); el.id = 'pcs-pop'; el.setAttribute('role', 'status');
+			document.body.appendChild(el);
+			el.addEventListener('mouseenter', function () { clearTimeout(popT); });
+			el.addEventListener('mouseleave', function () { popT = setTimeout(hidePop, 3000); });
+			el.addEventListener('click', function (e) { if (e.target.closest('.pp-x') || e.target.closest('.js-cart')) { hidePop(); } });
+		}
+		el.innerHTML = '<button type="button" class="pp-x" aria-label="Close">×</button>' +
+			'<div class="pp-row">' + (info.img ? '<img src="' + esc(info.img) + '" alt="" width="64" height="64">' : '<span class="pp-ok">✓</span>') +
+			'<div class="pp-txt"><strong>✓ Added to cart</strong><span class="pp-nm">' + esc(info.name) + (info.label ? ' · ' + esc(info.label) : '') + '</span>' +
+			'<span class="pp-sum">' + p.count + ' item' + (p.count === 1 ? '' : 's') + ' in cart · ' + esc(p.sub) + '</span></div></div>' +
+			'<div class="pp-btns"><a class="btn btn-line js-cart" href="' + PCS.checkout + '">View cart</a><a class="btn" href="' + PCS.checkout + '">Checkout</a></div>';
+		void el.offsetWidth; el.className = 'show';
+		clearTimeout(popT); popT = setTimeout(hidePop, 6500);
+	}
+	function hidePop() { var el = $('#pcs-pop'); if (el) { el.className = ''; } }
+
+	function add(id, g, cut, q, btn, info) {
 		if (btn) { btn.disabled = true; }
 		wc('pcs_add', { id: id, g: g, cut: cut || '', q: q }).then(function (p) {
 			badge(p.count);
-			if (drawerOpen()) { paintDrawer(p); } else { toast('Added to cart', true); }
+			if (drawerOpen()) { paintDrawer(p); } else { popup(info || { name: 'Item' }, p); }
 		}).catch(function (er) { toast(er.message); }).then(function () { if (btn) { btn.disabled = false; } });
 	}
 
@@ -56,14 +77,16 @@
 		var card = b.closest('.card');
 		if (card) {
 			var d = JSON.parse(card.getAttribute('data-card'));
-			add(d.id, parseInt($('.sel-w', card).value, 10), d.cuts[0] || '', 1, b);
+			var sel = $('.sel-w', card), im = $('.card-img img', card);
+			add(d.id, parseInt(sel.value, 10), d.cuts[0] || '', 1, b, { name: d.name, label: sel.options[sel.selectedIndex].text, img: im ? im.src : '' });
 			return;
 		}
 		var p = b.closest('.pdp');
 		if (p) {
 			var pd = JSON.parse(p.getAttribute('data-card'));
 			var w = $('input[name=w]:checked', p), c = $('input[name=cut]:checked', p), q = $('#pdp-q', p);
-			add(pd.id, parseInt(w.value, 10), c ? c.value : '', Math.max(1, Math.min(20, parseInt(q.value, 10) || 1)), b);
+			var pim = $('.pdp-img img', p);
+			add(pd.id, parseInt(w.value, 10), c ? c.value : '', Math.max(1, Math.min(20, parseInt(q.value, 10) || 1)), b, { name: pd.name, label: $('span', w.parentNode).textContent + (c ? ' · ' + c.value : ''), img: pim ? pim.src : '' });
 		}
 	});
 	document.addEventListener('change', function (e) {
@@ -101,6 +124,7 @@
 		if (!dr) { buildDrawer(); }
 		lastFocus = document.activeElement;
 		var tt2 = $('#pcs-toast'); if (tt2) { tt2.className = ''; }
+		hidePop();
 		dr.hidden = false; void dr.offsetWidth; dr.classList.add('open');
 		document.body.classList.add('lock');
 		$('.dr-x', dr).focus();

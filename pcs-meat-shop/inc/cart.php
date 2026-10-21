@@ -121,6 +121,7 @@ function pcs_cart_payload() {
 	return array(
 		'count' => (int) $cart->get_cart_contents_count(),
 		'empty' => $cart->is_empty(),
+		'sub'   => pcs_money( $sub ),
 		'lines' => $lines,
 		'foot'  => '<dl><div><dt>Items</dt><dd>' . esc_html( pcs_money( $sub ) ) . '</dd></div>' .
 			( $disc ? '<div><dt>Discount</dt><dd>−' . esc_html( pcs_money( $disc ) ) . '</dd></div>' : '' ) .
