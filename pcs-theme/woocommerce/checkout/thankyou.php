@@ -95,6 +95,6 @@ defined( 'ABSPATH' ) || exit;
 		<a class="btn btn-line" href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>">Continue shopping</a>
 		<?php if ( $wa ) : ?><a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/<?php echo esc_attr( $wa ); ?>?text=<?php echo rawurlencode( 'Hi, about my order #' . $order->get_order_number() ); ?>">Need help? WhatsApp</a><?php endif; ?>
 	</div>
-	<?php do_action( 'woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id() ); ?>
+	<?php if ( 'cod' !== $order->get_payment_method() ) { do_action( 'woocommerce_thankyou_' . $order->get_payment_method(), $order->get_id() ); } ?>
 <?php endif; ?>
 </div>

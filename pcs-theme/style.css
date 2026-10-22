@@ -934,7 +934,7 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .ty-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;border:1px solid var(--line);background:#fff;margin-bottom:18px}
 .ty-meta div{padding:14px 16px;border-right:1px solid var(--line)}
 .ty-meta div:last-child{border-right:0}
-.ty-meta span{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:#777;margin-bottom:3px}
+.ty-meta>div>span{display:block;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:#777;margin-bottom:3px}
 .ty-meta strong{font-size:1.02rem}
 .ty-inv{background:#fff;border:1px solid #d9c9cc;padding:26px 28px;border-top:4px solid var(--red)}
 .ty-inv-h{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:6px}
