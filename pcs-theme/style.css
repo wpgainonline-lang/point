@@ -871,3 +871,14 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .pdp-faq{grid-template-columns:1fr 1fr;gap:8px}
 .pdp-faq .faq-item summary{padding:12px 14px}
 @media(max-width:900px){.pdp-gal{position:static}.pdp-tips,.pdp-faq{grid-template-columns:1fr}.pdp-img img{max-height:none}}
+
+.pdp-ic{width:48px;height:48px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center}
+.pdp-ic .ic{width:26px;height:26px}
+.pdp-badges{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){
+ .pdp-img img{aspect-ratio:4/3}
+ .pdp-buy{position:sticky;bottom:58px;z-index:20;background:#fff;margin:8px -16px 0;padding:10px 16px;border-top:1px solid var(--line);align-items:center}
+ .pdp-buy label{font-size:0;max-width:84px}
+ .pdp-buy label input{font-size:1rem}
+ .pdp-buy .btn{flex:1}
+}

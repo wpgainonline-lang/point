@@ -11,7 +11,11 @@ $icon_row = function ( $key, $cls ) {
 	if ( ! $rows ) { return; }
 	echo '<ul class="' . esc_attr( $cls ) . '">';
 	foreach ( $rows as $r ) {
-		echo '<li>' . ( ! empty( $r[0] ) ? '<img src="' . esc_url( $r[0] ) . '" alt="" width="56" height="56" loading="lazy">' : '' ) . '<span>' . esc_html( $r[1] ?? '' ) . '</span></li>';
+		$ic = '';
+		if ( ! empty( $r[0] ) ) {
+			$ic = 0 === strpos( $r[0], 'http' ) ? '<img src="' . esc_url( $r[0] ) . '" alt="" width="56" height="56" loading="lazy">' : '<span class="pdp-ic">' . pcs_icon( $r[0] ) . '</span>'; // phpcs:ignore
+		}
+		echo '<li>' . $ic . '<span>' . esc_html( $r[1] ?? '' ) . '</span></li>';
 	}
 	echo '</ul>';
 };
