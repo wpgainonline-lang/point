@@ -730,3 +730,11 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .promo .slide img{width:100%;height:auto;aspect-ratio:12/1;object-fit:cover;display:block}
 .promo .sl-btn{height:34px;width:30px;font-size:1.3rem;top:50%;background:rgba(255,255,255,.9)}
 @media(max-width:800px){.promo .slide img{aspect-ratio:auto;height:46px;object-position:60% 50%}.promo .sl-btn{display:none}.promo-strip{padding:2px 0 18px}}
+
+/* promo strip: small, rounded, fading */
+.promo-strip{padding:4px 0 24px}
+.pf{position:relative;max-width:880px;margin:0 auto;aspect-ratio:12/1;border-radius:8px;overflow:hidden;background:#7a0a1a}
+.pf a{position:absolute;inset:0;opacity:0;transition:opacity 1s ease;display:block}
+.pf a.on{opacity:1;z-index:1}
+.pf img{width:100%;height:100%;object-fit:cover;display:block}
+@media(max-width:800px){.pf{max-width:none;aspect-ratio:auto;height:44px;border-radius:6px}.pf img{object-position:60% 50%}.promo-strip{padding:0 0 16px}}

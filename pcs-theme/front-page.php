@@ -70,11 +70,8 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 </div></section>
 <?php if ( 0 === $ci && $promos && count( $cats ) > 1 ) : ?>
 <section class="promo-strip"><div class="wrap">
-	<div class="slider promo" data-slider data-auto="4500">
-		<div class="hero" aria-label="Offers">
-			<?php foreach ( $promos as $pr ) : ?><a class="slide" href="<?php echo esc_url( 0 === strpos( $pr[2] ?? '', 'http' ) ? $pr[2] : home_url( $pr[2] ?? '/' ) ); ?>"><img src="<?php echo esc_url( $pr[0] ); ?>" alt="<?php echo esc_attr( $pr[1] ?? '' ); ?>" loading="lazy" width="1200" height="100"></a><?php endforeach; ?>
-		</div>
-		<?php if ( count( $promos ) > 1 ) : ?><button type="button" class="sl-btn sl-prev" aria-label="Previous">&lsaquo;</button><button type="button" class="sl-btn sl-next" aria-label="Next">&rsaquo;</button><?php endif; ?>
+	<div class="pf" data-fade="4500">
+		<?php foreach ( $promos as $i => $pr ) : ?><a class="<?php echo 0 === $i ? 'on' : ''; ?>" href="<?php echo esc_url( 0 === strpos( $pr[2] ?? '', 'http' ) ? $pr[2] : home_url( $pr[2] ?? '/' ) ); ?>"<?php echo $i ? ' tabindex="-1" aria-hidden="true"' : ''; ?>><img src="<?php echo esc_url( $pr[0] ); ?>" alt="<?php echo esc_attr( $pr[1] ?? '' ); ?>" loading="lazy" width="1200" height="100"></a><?php endforeach; ?>
 	</div>
 </div></section>
 <?php endif; $ci++; ?>

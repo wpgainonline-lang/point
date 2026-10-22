@@ -313,6 +313,19 @@
 		document.addEventListener('click', function (e) { if (!sf.contains(e.target)) { shut(); } });
 	}
 
+	/* ---------------- fading promo strip ---------------- */
+	$$('[data-fade]').forEach(function (box) {
+		var items = $$('a', box), every = parseInt(box.getAttribute('data-fade'), 10) || 4500, cur = 0, hold = false;
+		if (items.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+		function show(n) {
+			items[cur].classList.remove('on'); items[cur].setAttribute('tabindex', '-1'); items[cur].setAttribute('aria-hidden', 'true');
+			cur = n; items[cur].classList.add('on'); items[cur].removeAttribute('tabindex'); items[cur].removeAttribute('aria-hidden');
+		}
+		setInterval(function () { if (!hold && !document.hidden) { show((cur + 1) % items.length); } }, every);
+		['mouseenter', 'focusin'].forEach(function (ev) { box.addEventListener(ev, function () { hold = true; }); });
+		['mouseleave', 'focusout'].forEach(function (ev) { box.addEventListener(ev, function () { hold = false; }); });
+	});
+
 	/* ---------------- sliders ---------------- */
 	$$('[data-slider]').forEach(function (sl) {
 		var track = $('.hero', sl);
