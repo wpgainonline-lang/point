@@ -97,34 +97,32 @@ $q_points = array(
 	array( 'star', 'Weighed &amp; packed', 'Every portion accurately weighed and hygienically packed.' ),
 );
 ?>
-<section class="section qh-sec"><div class="wrap">
-	<div class="qh-top">
-		<div class="qh-txt">
-			<span class="kicker">Quality &amp; hygiene</span>
-			<h2>Clean meat starts with a clean process</h2>
-			<p class="qh-lead">From selection and storage to cutting and packing, every stage has a clear standard. Walk in any day and see how the meat is stored, cut and packed before you order.</p>
-			<div class="qh-btns">
-				<a class="btn" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>">See our process &rarr;</a>
-				<a class="btn btn-line" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>#visit">Visit the counter</a>
-			</div>
-		</div>
+<section class="section qh-sec"><div class="wrap qh">
+	<div class="qh-txt">
+		<span class="kicker">Quality &amp; hygiene</span>
+		<h2>Clean meat starts with a clean process</h2>
+		<p class="qh-lead">From selection and storage to cutting and packing, every stage has a clear standard. Walk in any day and see how the meat is stored, cut and packed before you order.</p>
 		<div class="qh-pts">
 			<?php foreach ( $q_points as $pt ) : ?>
 			<div class="qh-pt"><span class="qh-ic"><?php echo pcs_icon( $pt[0] ); // phpcs:ignore ?></span><div><strong><?php echo wp_kses_post( $pt[1] ); ?></strong><span><?php echo esc_html( $pt[2] ); ?></span></div></div>
 			<?php endforeach; ?>
 		</div>
+		<div class="qh-btns">
+			<a class="btn" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>">See our process &rarr;</a>
+			<a class="btn btn-line" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>#visit">Visit the counter</a>
+		</div>
 	</div>
-	<div class="qh-imgs">
-		<?php foreach ( array( 'chicken' => $q_a, 'mutton' => $q_b ) as $slug => $fallback ) :
+	<div class="qh-pics">
+		<?php foreach ( array( 'chicken' => array( $q_a, 'qh-big' ), 'mutton' => array( $q_b, 'qh-small' ) ) as $slug => $cfg ) :
 			$img  = pcs_opt( 'qh_img_' . $slug );
 			$term = get_term_by( 'slug', $slug, 'product_cat' );
-			if ( ! $img && $fallback ) {
-				$img = get_the_post_thumbnail_url( $fallback, 'large' );
+			if ( ! $img && $cfg[0] ) {
+				$img = get_the_post_thumbnail_url( $cfg[0], 'large' );
 			}
 			if ( ! $img ) {
 				continue;
 			} ?>
-		<a href="<?php echo esc_url( $term ? get_term_link( $term ) : wc_get_page_permalink( 'shop' ) ); ?>"><img src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( ucfirst( $slug ) ); ?> from House of Cutts" loading="lazy" width="1355" height="1160"></a>
+		<a class="<?php echo esc_attr( $cfg[1] ); ?>" href="<?php echo esc_url( $term ? get_term_link( $term ) : wc_get_page_permalink( 'shop' ) ); ?>"><img src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( ucfirst( $slug ) ); ?> from House of Cutts" loading="lazy" width="1355" height="1160"></a>
 		<?php endforeach; ?>
 	</div>
 </div></section>

@@ -772,3 +772,13 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .qh-imgs img{aspect-ratio:1355/1161}
 @media(max-width:900px){.qh-top{grid-template-columns:minmax(0,1fr);gap:20px;margin-bottom:22px}.qh-top .qh-pts{grid-template-columns:1fr}.qh-imgs{grid-template-columns:1fr;gap:14px}}
 .qh-top h2{font-size:clamp(1.7rem,3.2vw,2.5rem);letter-spacing:-.02em;margin:0 0 .4em;line-height:1.15}
+
+/* Quality v4: text left, big photo with small overlapping photo */
+.qh{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.qh-pics{position:relative;padding:0 0 70px 0}
+.qh-pics a{display:block;overflow:hidden;background:#fff}
+.qh-pics a img{width:100%;height:auto;display:block;aspect-ratio:1355/1160;object-fit:cover;transition:transform .35s ease}
+.qh-pics a:hover img{transform:scale(1.04)}
+.qh-pics .qh-big{width:88%;margin-left:auto;aspect-ratio:auto;border:1px solid #d9c9cc}
+.qh-pics .qh-small{position:absolute;left:0;bottom:0;width:50%;aspect-ratio:auto;border:8px solid #fbf6f6;outline:1px solid #d9c9cc}
+@media(max-width:900px){.qh{grid-template-columns:minmax(0,1fr);gap:28px}.qh-pics{padding-bottom:56px}.qh-pics .qh-big{width:90%}.qh-pics .qh-small{width:50%}}
