@@ -837,3 +837,37 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .pdp-nutri span{color:#555;font-size:.9rem}
 .pdp-faq{grid-template-columns:1fr}
 @media(max-width:900px){.pdp{grid-template-columns:minmax(0,1fr);gap:22px}.pdp-badges{grid-template-columns:repeat(2,1fr)}.pdp-policy{grid-template-columns:repeat(2,1fr)}.pdp-tips details p{padding-left:14px}}
+
+/* Product page compact */
+.pdp{gap:32px;padding:10px 0 4px}
+.pdp-gal{position:sticky;top:90px}
+.pdp-img img{aspect-ratio:1/1;max-height:520px;width:100%}
+.pdp-thumbs button{width:60px;height:60px}
+.pdp h1{font-size:clamp(1.6rem,2.6vw,2.1rem);margin:0 0 4px}
+.pdp .big{font-size:1.8rem}
+.pdp-price{margin:4px 0 6px}
+.pdp-badges{margin:8px 0 12px;padding:10px 0;gap:6px}
+.pdp-badges img{width:38px;height:38px}
+.pdp-badges li{font-size:.82rem;gap:4px}
+.pdp fieldset{margin:0 0 8px}
+.pdp legend{margin-bottom:5px}
+.pdp .chip span{padding:6px 14px}
+.pdp-buy{margin:4px 0 0}
+.pdp .btn{padding:11px 26px;font-size:1.05rem}
+.pdp-assist{margin:12px 0 4px}
+.pdp-assist a{padding:5px 12px}
+.pdp .pin-check{margin-top:10px}
+.pdp-tips{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start}
+.pdp-tips details{margin:0}
+.pdp-tips summary{padding:7px 10px;gap:8px;font-size:.95rem}
+.pdp-tips summary img{width:24px;height:24px}
+.pdp-tips details p{padding:0 10px 10px;font-size:.92rem}
+.pdp-policy{padding:14px 0;gap:10px;margin-top:6px}
+.pdp-policy img{width:40px;height:40px}
+.pdp-policy li{font-size:.85rem}
+.pdp-sections section{padding:18px 0 2px}
+.pdp-sections h2{font-size:1.3rem;margin:0 0 10px}
+.pdp-list{line-height:1.6}
+.pdp-faq{grid-template-columns:1fr 1fr;gap:8px}
+.pdp-faq .faq-item summary{padding:12px 14px}
+@media(max-width:900px){.pdp-gal{position:static}.pdp-tips,.pdp-faq{grid-template-columns:1fr}.pdp-img img{max-height:none}}

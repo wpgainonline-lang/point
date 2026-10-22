@@ -29,7 +29,6 @@ $tel = preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) );
 		<div class="pdp-gal">
 			<div class="pdp-img"><?php if ( $gal ) { echo wp_get_attachment_image( $gal[0], 'large', false, array( 'id' => 'pdp-main', 'loading' => 'eager', 'fetchpriority' => 'high' ) ); } ?></div>
 			<?php if ( count( $gal ) > 1 ) : ?><div class="pdp-thumbs"><?php foreach ( $gal as $i => $gid ) : ?><button type="button" class="<?php echo 0 === $i ? 'on' : ''; ?>" data-full="<?php echo esc_url( wp_get_attachment_image_url( $gid, 'large' ) ); ?>" aria-label="Photo <?php echo (int) $i + 1; ?>"><?php echo wp_get_attachment_image( $gid, 'thumbnail', false, array( 'loading' => 'lazy' ) ); ?></button><?php endforeach; ?></div><?php endif; ?>
-			<p class="pdp-disc muted">Images are for representation purposes only. Actual product may vary.</p>
 		</div>
 		<div class="pdp-info">
 			<h1><?php the_title(); ?></h1>
@@ -48,7 +47,7 @@ $tel = preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) );
 			<div class="pdp-assist"><strong>Any assistance?</strong><a class="as-call" href="tel:<?php echo esc_attr( $tel ); ?>"><?php echo pcs_icon( 'phone' ); // phpcs:ignore ?> Call</a><a class="as-wa" href="https://wa.me/<?php echo esc_attr( preg_replace( '/\D/', '', pcs_opt( 'whatsapp' ) ) ); ?>?text=<?php echo rawurlencode( 'Hi, I have a question about ' . get_the_title() ); ?>" target="_blank" rel="noopener">WhatsApp</a></div>
 			<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Delivery pincode" aria-label="Pincode"><button class="btn btn-line" type="submit">Check delivery</button><span class="msg" role="status"></span></form>
 			<?php $tips = pcs_lines( 'pdp_tips' ); if ( $tips ) : $tic = pcs_opt( 'pdp_tip_icon' ); ?>
-			<div class="pdp-tips"><h3>Tips</h3>
+			<div class="pdp-tips">
 				<?php foreach ( $tips as $t ) : ?><details><summary><?php if ( $tic ) : ?><img src="<?php echo esc_url( $tic ); ?>" alt="" width="32" height="32" loading="lazy"><?php endif; ?><span><?php echo esc_html( $t[0] ); ?></span><i class="pm" aria-hidden="true"></i></summary><p><?php echo esc_html( $t[1] ?? '' ); ?></p></details><?php endforeach; ?>
 			</div>
 			<?php endif; ?>
