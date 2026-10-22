@@ -40,12 +40,10 @@ add_filter( 'woocommerce_email_order_meta_fields', function ( $f, $sent, $order 
 	}
 	return $f;
 }, 10, 3 );
-add_action( 'woocommerce_thankyou', function ( $id ) {
-	$o = wc_get_order( $id );
-	if ( $o && pcs_order_slot_text( $o ) ) {
-		echo '<p><strong>Delivery slot:</strong> ' . esc_html( pcs_order_slot_text( $o ) ) . '</p>';
-	}
-}, 5 );
+// The order received page (theme thankyou.php) draws its own order details.
+add_action( 'init', function () {
+	remove_action( 'woocommerce_thankyou', 'woocommerce_order_details_table', 10 );
+} );
 
 /* Orders list: show the slot next to each order. */
 add_filter( 'manage_woocommerce_page_wc-orders_columns', function ( $c ) {

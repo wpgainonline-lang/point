@@ -67,6 +67,7 @@ function pcs_theme_nav() {
 /** Tiny inline line icons (24x24, stroke only) so no icon font or image requests are needed. */
 function pcs_icon( $name ) {
 	$p = array(
+		'check' => '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
 		'snow'  => '<path d="M12 2v20M4 7l16 10M20 7L4 17M9 3l3 2 3-2M9 21l3-2 3 2"/>',
 		'shield' => '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
 		'knife' => '<path d="M4 20L16 8c2-2 4-3 5-3 0 1-1 3-3 5L9 19z"/><path d="M4 20l3-1"/>',
