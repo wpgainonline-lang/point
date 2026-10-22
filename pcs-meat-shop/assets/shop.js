@@ -98,7 +98,9 @@
 		var w = e.target.closest('.pdp input[name=w]');
 		if (w) {
 			var p = w.closest('.pdp'), pd = JSON.parse(p.getAttribute('data-card'));
-			$('#pdp-price', p).textContent = money(pd.prices[pd.weights.indexOf(parseInt(w.value, 10))]);
+			var wi = pd.weights.indexOf(parseInt(w.value, 10)), mr = $('#pdp-mrp', p);
+			$('#pdp-price', p).textContent = money(pd.prices[wi]);
+			if (mr && pd.mrps) { mr.textContent = money(pd.mrps[wi]); }
 		}
 	});
 
@@ -401,3 +403,13 @@
 	}
 	tick(); setInterval(tick, 1000);
 })();
+
+/* Product page photo thumbnails */
+document.addEventListener('click', function (e) {
+	var t = e.target.closest('.pdp-thumbs button');
+	if (!t) { return; }
+	var m = document.getElementById('pdp-main');
+	if (m) { m.src = t.getAttribute('data-full'); m.removeAttribute('srcset'); m.removeAttribute('sizes'); }
+	var on = document.querySelector('.pdp-thumbs .on'); if (on) { on.classList.remove('on'); }
+	t.classList.add('on');
+});

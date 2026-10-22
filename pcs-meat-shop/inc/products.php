@@ -43,6 +43,7 @@ function pcs_card_data( $id ) {
 	return array(
 		'id' => $id, 'name' => get_the_title( $id ), 'weights' => $w, 'cuts' => pcs_cuts( $id ),
 		'prices' => array_map( function ( $g ) use ( $id ) { return pcs_price_for( $id, $g ); }, $w ),
+		'mrps' => array_map( function ( $g ) use ( $id ) { return pcs_price_for( $id, $g, true ); }, $w ),
 		'inStock' => pcs_in_stock( $id ),
 	);
 }
@@ -82,9 +83,16 @@ add_action( 'woocommerce_product_options_pricing', function () {
 	woocommerce_wp_text_input( array( 'id' => '_pcs_weights', 'label' => 'Weight options (grams)', 'description' => 'Comma separated, e.g. 250,500,1000', 'desc_tip' => false, 'placeholder' => '500,1000' ) );
 	woocommerce_wp_text_input( array( 'id' => '_pcs_cuts', 'label' => 'Cut options', 'description' => 'Comma separated, e.g. Curry cut,Biryani cut. Leave empty if not needed.', 'desc_tip' => false ) );
 	woocommerce_wp_text_input( array( 'id' => '_pcs_note', 'label' => 'Short note', 'description' => 'e.g. Serves 4-5', 'desc_tip' => false ) );
+	woocommerce_wp_textarea_input( array( 'id' => '_pcs_shelf', 'label' => 'Shelf life (this product)', 'description' => 'One point per line. Leave empty to use the default from Meat Shop → Settings → Product page.', 'desc_tip' => false ) );
+	woocommerce_wp_textarea_input( array( 'id' => '_pcs_nutri', 'label' => 'Nutrition per 100g', 'description' => 'One per line: Name|Value, e.g. Energy|97 kcal. Leave empty to hide.', 'desc_tip' => false, 'placeholder' => "Energy|97 kcal\nProtein|17 g" ) );
 } );
 
 add_action( 'woocommerce_admin_process_product_object', function ( $product ) {
+	foreach ( array( '_pcs_shelf', '_pcs_nutri' ) as $k ) {
+		if ( isset( $_POST[ $k ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$product->update_meta_data( $k, sanitize_textarea_field( wp_unslash( $_POST[ $k ] ) ) ); // phpcs:ignore
+		}
+	}
 	foreach ( array( '_pcs_weights', '_pcs_cuts', '_pcs_note' ) as $k ) {
 		if ( isset( $_POST[ $k ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			$product->update_meta_data( $k, sanitize_text_field( wp_unslash( $_POST[ $k ] ) ) ); // phpcs:ignore
