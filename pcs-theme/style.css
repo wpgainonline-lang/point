@@ -982,3 +982,19 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .ty-note{border-left:3px solid var(--red);padding:4px 0 4px 14px;margin-bottom:12px}
 .ty-note small{color:#777}
 .ty-note p{margin:2px 0 0}
+/* Category pages */
+.cat-hero{display:flex;align-items:stretch;justify-content:space-between;gap:24px;background:#fbf1f2;border:1px solid #efd5d8;margin:16px 0 18px;overflow:hidden}
+.cat-hero-t{padding:26px 30px;flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.cat-hero .crumbs{font-size:.88rem;color:#777;margin-bottom:6px}
+.cat-hero h1{margin:0 0 8px;font-size:clamp(2rem,4vw,3rem);letter-spacing:-.02em;line-height:1.05}
+.cat-hero p{margin:0 0 16px;color:#444;font-size:1.08rem;max-width:52ch}
+.cat-hero-n{display:flex;gap:8px;flex-wrap:wrap}
+.cat-hero-n span{background:#fff;border:1px solid #e3c9cd;padding:5px 14px;font-weight:700;font-size:.88rem;color:var(--red)}
+.cat-hero-i{flex:0 0 38%;max-width:480px}
+.cat-hero-i img{width:100%;height:100%;object-fit:cover;display:block;min-height:190px}
+.cat-tabs{margin-bottom:20px}
+.cat-tabs a{padding:9px 22px;font-weight:700}
+.grid4{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:34px}
+.grid4 .card{height:100%}
+@media(max-width:1000px){.grid4{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cat-hero{flex-direction:column;gap:0}.cat-hero-t{padding:18px 16px}.cat-hero-i{flex:none;max-width:none;order:-1}.cat-hero-i img{height:150px;min-height:0}}
