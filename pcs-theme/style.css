@@ -998,3 +998,8 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .grid4 .card{height:100%}
 @media(max-width:1000px){.grid4{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:800px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cat-hero{flex-direction:column;gap:0}.cat-hero-t{padding:18px 16px}.cat-hero-i{flex:none;max-width:none;order:-1}.cat-hero-i img{height:150px;min-height:0}}
+.cat-hero{min-height:200px}
+.cat-hero-i{position:relative;flex:0 0 34%;min-height:200px}
+.cat-hero-i img{position:absolute;inset:0;width:100%;height:100%;min-height:0;object-fit:cover;object-position:center 45%}
+.cat-hero-t{padding:22px 30px}
+@media(max-width:800px){.cat-hero-i{flex:none;height:150px;min-height:0}}
