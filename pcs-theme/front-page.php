@@ -77,17 +77,6 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 <?php endif; $ci++; ?>
 <?php endforeach; ?>
 
-<?php if ( $banners ) : ?>
-<section class="section" style="padding:0 0 32px"><div>
-	<div class="slider slider-full" data-slider>
-		<div class="hero" tabindex="0" aria-label="Offers">
-			<?php foreach ( $banners as $b ) : ?><a class="slide" href="<?php echo esc_url( home_url( $b[3] ?? '/' ) ); ?>"><img src="<?php echo esc_url( $b[0] ); ?>" alt="<?php echo esc_attr( $b[1] ?? '' ); ?>" loading="lazy" width="1896" height="829"></a><?php endforeach; ?>
-		</div>
-		<?php if ( count( $banners ) > 1 ) : ?><button type="button" class="sl-btn sl-prev" aria-label="Previous">‹</button><button type="button" class="sl-btn sl-next" aria-label="Next">›</button><?php endif; ?>
-	</div>
-</div></section>
-<?php endif; ?>
-
 <section class="section soft"><div class="wrap">
 	<div class="section-head"><h2>How it works</h2></div>
 	<div class="steps">
