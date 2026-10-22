@@ -59,6 +59,35 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 <section class="offer"><div class="wrap"><?php echo esc_html( $offer ); ?></div></section>
 <?php endif; ?>
 
+<?php
+$deal_ids = array_filter( array_map( 'absint', explode( ',', (string) pcs_opt( 'deal_ids' ) ) ) );
+if ( ! $deal_ids ) {
+	$deal_ids = array();
+	foreach ( $by_cat as $plist ) {
+		foreach ( array_slice( $plist, 0, 2 ) as $dp ) { $deal_ids[] = $dp->ID; }
+	}
+	$deal_ids = array_slice( $deal_ids, 0, 4 );
+}
+$deal_raw = trim( (string) pcs_opt( 'deal_end' ) );
+$deal_ts  = $deal_raw ? strtotime( $deal_raw . ' ' . wp_timezone_string() ) : strtotime( 'next monday', current_time( 'timestamp' ) );
+if ( $deal_ids && $deal_ts && $deal_ts > time() ) : ?>
+<section class="section deal-sec"><div class="wrap">
+	<div class="deal-head">
+		<h2><?php echo esc_html( pcs_opt( 'deal_title' ) ?: 'Deal Of The Week' ); ?></h2>
+		<div class="deal-cd" data-countdown="<?php echo (int) $deal_ts; ?>" data-now="<?php echo (int) time(); ?>">
+			<span><b data-u="d">00</b>Days</span><span><b data-u="h">00</b>Hours</span><span><b data-u="m">00</b>Mins</span><span><b data-u="s">00</b>Secs</span>
+		</div>
+	</div>
+	<div class="deal-grid">
+		<?php foreach ( $deal_ids as $did ) :
+			if ( 'product' !== get_post_type( $did ) ) { continue; }
+			$dm = pcs_mrp_kg( $did ); $dn = pcs_price_kg( $did );
+			echo '<div class="deal-item">' . ( $dm && $dn && $dm > $dn ? '<span class="deal-off">' . (int) round( ( 1 - $dn / $dm ) * 100 ) . '% OFF</span>' : '' ) . pcs_card( $did ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		endforeach; ?>
+	</div>
+</div></section>
+<?php endif; ?>
+
 <?php $promos = pcs_lines( 'promos' ); $ci = 0; ?>
 <?php foreach ( $cats as $t ) : $list = array_slice( $by_cat[ $t->slug ] ?? array(), 0, 12 ); if ( ! $list ) { continue; } ?>
 <section class="section"><div class="wrap">

@@ -387,3 +387,17 @@
 		}
 	});
 })();
+
+/* Deal countdown */
+(function () {
+	var el = document.querySelector('[data-countdown]');
+	if (!el) { return; }
+	var end = +el.getAttribute('data-countdown'), off = +el.getAttribute('data-now') - Math.floor(Date.now() / 1000);
+	function pad(n) { return (n < 10 ? '0' : '') + n; }
+	function tick() {
+		var left = Math.max(0, end - (Math.floor(Date.now() / 1000) + off));
+		var v = { d: Math.floor(left / 86400), h: Math.floor(left % 86400 / 3600), m: Math.floor(left % 3600 / 60), s: left % 60 };
+		for (var k in v) { var b = el.querySelector('[data-u=' + k + ']'); if (b) { b.textContent = pad(v[k]); } }
+	}
+	tick(); setInterval(tick, 1000);
+})();
