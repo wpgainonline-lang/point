@@ -313,13 +313,21 @@
 		document.addEventListener('click', function (e) { if (!sf.contains(e.target)) { shut(); } });
 	}
 
-	/* ---------------- fading promo strip ---------------- */
+	/* ---------------- promo strip: slide + zoom + shine, with small dots ---------------- */
 	$$('[data-fade]').forEach(function (box) {
 		var items = $$('a', box), every = parseInt(box.getAttribute('data-fade'), 10) || 4500, cur = 0, hold = false;
-		if (items.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+		if (items.length < 2) { return; }
+		var dots = document.createElement('span'); dots.className = 'pf-dots'; dots.setAttribute('aria-hidden', 'true');
+		items.forEach(function (_, i) { var d = document.createElement('i'); if (!i) { d.className = 'on'; } dots.appendChild(d); });
+		box.appendChild(dots);
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 		function show(n) {
-			items[cur].classList.remove('on'); items[cur].setAttribute('tabindex', '-1'); items[cur].setAttribute('aria-hidden', 'true');
+			var prev = items[cur];
+			prev.classList.remove('on'); prev.classList.add('out'); prev.setAttribute('tabindex', '-1'); prev.setAttribute('aria-hidden', 'true');
+			setTimeout(function () { prev.classList.remove('out'); }, 1000);
 			cur = n; items[cur].classList.add('on'); items[cur].removeAttribute('tabindex'); items[cur].removeAttribute('aria-hidden');
+			$$('i', dots).forEach(function (d, i) { d.className = i === cur ? 'on' : ''; });
+			box.classList.remove('shine'); void box.offsetWidth; box.classList.add('shine');
 		}
 		setInterval(function () { if (!hold && !document.hidden) { show((cur + 1) % items.length); } }, every);
 		['mouseenter', 'focusin'].forEach(function (ev) { box.addEventListener(ev, function () { hold = true; }); });
