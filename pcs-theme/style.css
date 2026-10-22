@@ -882,3 +882,13 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
  .pdp-buy label input{font-size:1rem}
  .pdp-buy .btn{flex:1}
 }
+/* Product page: attractive icon cards */
+.pdp-badges{border:0;padding:0;margin:12px 0 14px;grid-template-columns:1fr 1fr;gap:10px}
+.pdp-badges li{flex-direction:row;text-align:left;gap:12px;background:#fbf1f2;border:1px solid #efd5d8;padding:10px 14px;font-size:.95rem;font-weight:700}
+.pdp-badges .pdp-ic{flex:none;width:42px;height:42px}
+.pdp-badges .pdp-ic .ic{width:22px;height:22px}
+.pdp-badges img{flex:none}
+.pdp-policy{border:0;padding:0;margin:18px 0 6px;gap:10px}
+.pdp-policy li{background:#fff;border:1px solid var(--line);padding:16px 8px;transition:border-color .2s,transform .2s}
+.pdp-policy li:hover{border-color:var(--red);transform:translateY(-2px)}
+@media(max-width:900px){.pdp-badges{grid-template-columns:1fr}.pdp-policy{grid-template-columns:repeat(2,1fr)}.pdp-policy li:last-child:nth-child(odd){grid-column:1/-1}}
