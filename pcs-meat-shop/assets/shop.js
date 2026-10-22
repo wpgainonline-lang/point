@@ -413,3 +413,11 @@ document.addEventListener('click', function (e) {
 	var on = document.querySelector('.pdp-thumbs .on'); if (on) { on.classList.remove('on'); }
 	t.classList.add('on');
 });
+
+/* Product page quantity stepper */
+document.addEventListener('click', function (e) {
+	var b = e.target.closest('.pdp-buy .qm, .pdp-buy .qp');
+	if (!b) { return; }
+	var q = document.getElementById('pdp-q'), v = parseInt(q.value, 10) || 1;
+	q.value = Math.max(1, Math.min(20, v + (b.classList.contains('qp') ? 1 : -1)));
+});

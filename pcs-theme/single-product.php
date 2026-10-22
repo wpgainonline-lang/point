@@ -40,14 +40,14 @@ $tel = preg_replace( '/[^\d+]/', '', pcs_opt( 'phone' ) );
 			<?php if ( $d['inStock'] ) : ?>
 				<p class="pdp-price"><span class="big" id="pdp-price"><?php echo esc_html( pcs_money( $d['prices'][0] ) ); ?></span><?php if ( $mrp ) : ?> <s class="muted" id="pdp-mrp"><?php echo esc_html( pcs_money( pcs_price_for( $id, $d['weights'][0], true ) ) ); ?></s><?php endif; ?><?php if ( $off ) : ?> <span class="pdp-off"><?php echo (int) $off; ?>% OFF</span><?php endif; ?> <span class="muted"><?php echo esc_html( pcs_money( $dn ) ); ?> / kg</span></p>
 			<?php endif; ?>
-			<?php $icon_row( 'pdp_badges', 'pdp-badges' ); ?>
 			<?php if ( $d['inStock'] ) : ?>
 				<fieldset><legend>Weight</legend><?php foreach ( $d['weights'] as $i => $g ) : ?><label class="chip"><input type="radio" name="w" value="<?php echo (int) $g; ?>" <?php checked( 0, $i ); ?>><span><?php echo esc_html( pcs_weight_label( $g ) ); ?></span></label><?php endforeach; ?></fieldset>
 				<?php if ( $d['cuts'] ) : ?><fieldset><legend>Cut</legend><?php foreach ( $d['cuts'] as $i => $c ) : ?><label class="chip"><input type="radio" name="cut" value="<?php echo esc_attr( $c ); ?>" <?php checked( 0, $i ); ?>><span><?php echo esc_html( $c ); ?></span></label><?php endforeach; ?></fieldset><?php endif; ?>
-				<div class="pdp-buy"><label>Quantity<input type="number" id="pdp-q" min="1" max="20" value="1"></label><button type="button" class="btn js-add">Add to cart</button></div>
+				<div class="pdp-buy"><div class="qty"><button type="button" class="qm" aria-label="Less">−</button><input type="number" id="pdp-q" min="1" max="20" value="1" aria-label="Quantity"><button type="button" class="qp" aria-label="More">+</button></div><button type="button" class="btn js-add pdp-add"><?php echo pcs_icon( 'cart' ); // phpcs:ignore ?> Add to cart</button></div>
 			<?php else : ?>
 				<p><strong><?php echo $dn > 0 ? 'Currently out of stock' : 'Call to order'; ?></strong></p>
 			<?php endif; ?>
+			<?php $icon_row( 'pdp_badges', 'pdp-badges' ); ?>
 			<div class="pdp-assist"><strong>Any assistance?</strong><a class="as-call" href="tel:<?php echo esc_attr( $tel ); ?>"><?php echo pcs_icon( 'phone' ); // phpcs:ignore ?> Call</a><a class="as-wa" href="https://wa.me/<?php echo esc_attr( preg_replace( '/\D/', '', pcs_opt( 'whatsapp' ) ) ); ?>?text=<?php echo rawurlencode( 'Hi, I have a question about ' . get_the_title() ); ?>" target="_blank" rel="noopener">WhatsApp</a></div>
 			<form class="pin-check"><input type="text" inputmode="numeric" maxlength="6" placeholder="Delivery pincode" aria-label="Pincode"><button class="btn btn-line" type="submit">Check delivery</button><span class="msg" role="status"></span></form>
 			<?php $tips = pcs_lines( 'pdp_tips' ); if ( $tips ) : $tic = pcs_opt( 'pdp_tip_icon' ); ?>
