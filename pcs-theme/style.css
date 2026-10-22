@@ -760,3 +760,4 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .qh-imgs img{width:100%;height:auto;aspect-ratio:1355/1160;object-fit:cover;display:block;transition:transform .35s ease}
 .qh-imgs a:hover img{transform:scale(1.04)}
 @media(max-width:900px){.qh-imgs{grid-template-columns:1fr;gap:14px}.qh-imgs a:nth-child(2){margin-top:0}}
+@media(max-width:900px){.qh{grid-template-columns:minmax(0,1fr);gap:26px}.qh-imgs{grid-template-columns:1fr}}
