@@ -968,3 +968,17 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
  #invoice,#invoice *{visibility:visible}
  #invoice{position:absolute;left:0;top:0;width:100%;border:0;padding:0}
 }
+
+/* View order (My account) */
+.woocommerce-account .woocommerce-MyAccount-content:has(.ty){border:0;padding:0;background:none}
+.ty-view{padding:22px 20px}
+.ty-view h1{font-size:clamp(1.5rem,3vw,2rem)}
+.ty-pill{display:inline-block;padding:5px 16px;font-weight:700;font-size:.92rem;background:#fff;border:1px solid #d9c9cc;color:#444}
+.ty-s-processing,.ty-s-pcs-packed,.ty-s-pcs-out{background:#fff4d6;border-color:#f0d58a;color:#7a5a00}
+.ty-s-completed{background:#dcf3e4;border-color:#a8dcb9;color:#146c37}
+.ty-s-cancelled,.ty-s-refunded,.ty-s-failed{background:#fde5e7;border-color:#f3b8bd;color:#a1121f}
+.ty-notes{margin-top:18px;background:#fff;border:1px solid var(--line);padding:18px 22px}
+.ty-notes h2{margin:0 0 10px;font-size:1.25rem}
+.ty-note{border-left:3px solid var(--red);padding:4px 0 4px 14px;margin-bottom:12px}
+.ty-note small{color:#777}
+.ty-note p{margin:2px 0 0}
