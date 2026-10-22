@@ -90,16 +90,35 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 	</div>
 </div></section>
 
-<section class="section"><div class="wrap split">
-	<div>
+<?php
+$q_a = $all[0] ?? null;
+$q_b = $all[12] ?? ( $all[1] ?? null );
+$q_points = array(
+	array( 'shield', 'Carefully sourced', 'Quality meat from trusted suppliers, checked before processing.' ),
+	array( 'knife', 'Hygienic environment', 'Cleaned and processed in a controlled, hygienic space.' ),
+	array( 'snow', 'Rapidly chilled', 'Chilled quickly to keep freshness, texture and quality.' ),
+	array( 'star', 'Weighed &amp; packed', 'Every portion accurately weighed and hygienically packed.' ),
+);
+?>
+<section class="section qh-sec"><div class="wrap qh">
+	<div class="qh-txt">
 		<span class="kicker">Quality &amp; hygiene</span>
 		<h2>Clean meat starts with a clean process</h2>
-		<p>From selection and storage to cutting and packing, every stage has a clear standard. Walk in any day and see how the meat is stored, cut and packed before you order.</p>
-		<ul class="ticks"><li>Carefully sourced and checked</li><li>Processed in a hygienic environment</li><li>Rapidly chilled to keep freshness</li><li>Weighed and packed for your kitchen</li></ul>
-		<a class="btn btn-line" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>">Our process</a>
+		<p class="qh-lead">From selection and storage to cutting and packing, every stage has a clear standard. Walk in any day and see how the meat is stored, cut and packed before you order.</p>
+		<div class="qh-pts">
+			<?php foreach ( $q_points as $pt ) : ?>
+			<div class="qh-pt"><span class="qh-ic"><?php echo pcs_icon( $pt[0] ); // phpcs:ignore ?></span><div><strong><?php echo wp_kses_post( $pt[1] ); ?></strong><span><?php echo esc_html( $pt[2] ); ?></span></div></div>
+			<?php endforeach; ?>
+		</div>
+		<div class="qh-btns">
+			<a class="btn" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>">See our process &rarr;</a>
+			<a class="btn btn-line" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>#visit">Visit the counter</a>
+		</div>
 	</div>
-	<div class="split-pics">
-		<?php foreach ( array_merge( array_slice( $all, 0, 1 ), array_slice( $all, 12, 1 ) ) as $p ) { echo get_the_post_thumbnail( $p, 'large', array( 'loading' => 'lazy' ) ); } ?>
+	<div class="qh-pics">
+		<?php if ( $q_a ) { echo get_the_post_thumbnail( $q_a, 'large', array( 'class' => 'qh-big', 'loading' => 'lazy' ) ); } ?>
+		<?php if ( $q_b ) { echo get_the_post_thumbnail( $q_b, 'medium_large', array( 'class' => 'qh-small', 'loading' => 'lazy' ) ); } ?>
+		<span class="qh-tag"><?php echo pcs_icon( 'snow' ); // phpcs:ignore ?> Fresh · Chilled · Hygienic</span>
 	</div>
 </div></section>
 

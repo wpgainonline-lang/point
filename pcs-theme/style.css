@@ -703,3 +703,22 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .woocommerce-checkout .auth .lform input{border:1.5px solid var(--bd)}
 .woocommerce-checkout .ci img{border:1px solid var(--bd2)}
 .woocommerce-checkout .co-sum .line{border-bottom-color:var(--bd2)}
+
+/* home: quality & hygiene section */
+.qh-sec{background:#fbf6f6;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.qh{display:grid;grid-template-columns:1.05fr 1fr;gap:56px;align-items:center}
+.qh h2{font-size:clamp(1.7rem,3.2vw,2.5rem);letter-spacing:-.02em;margin-bottom:.4em}
+.qh-lead{font-size:1.12rem;color:#444;max-width:56ch}
+.qh-pts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 26px}
+.qh-pt{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);padding:16px}
+.qh-pt strong{display:block;font-size:1.08rem;margin-bottom:2px}
+.qh-pt span:not(.qh-ic){display:block;color:#555;font-size:.95rem;line-height:1.4}
+.qh-ic{flex:none;width:44px;height:44px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center}
+.qh-ic .ic{width:24px;height:24px}
+.qh-btns{display:flex;gap:10px;flex-wrap:wrap}
+.qh-pics{position:relative;padding:0 0 56px 0}
+.qh-big{width:84%;aspect-ratio:4/5;object-fit:cover;display:block;margin-left:auto}
+.qh-small{position:absolute;left:0;bottom:0;width:52%;aspect-ratio:1/1;object-fit:cover;border:8px solid #fbf6f6}
+.qh-tag{position:absolute;left:0;top:22px;background:var(--red);color:#fff;font-weight:700;padding:9px 16px;display:flex;align-items:center;gap:8px;letter-spacing:.02em}
+.qh-tag .ic{width:20px;height:20px}
+@media(max-width:900px){.qh{grid-template-columns:1fr;gap:28px}.qh-pts{grid-template-columns:1fr}.qh-big{width:88%;aspect-ratio:4/3}.qh-small{width:46%}.qh-pics{padding-bottom:40px}}
