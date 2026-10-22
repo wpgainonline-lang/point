@@ -751,3 +751,12 @@ form.checkout_coupon p:first-child{margin:0 0 10px}
 .pf-dots i.on{width:22px;background:#fff}
 @media(max-width:800px){.pf-dots{right:8px;bottom:3px}.pf-dots i{width:9px;height:2px}.pf-dots i.on{width:15px}}
 @media(prefers-reduced-motion:reduce){.pf a{transition:none}.pf.shine:after{animation:none}}
+
+/* quality section: two photos side by side, second one stepped down */
+.qh{grid-template-columns:.95fr 1.05fr;gap:44px}
+.qh-imgs{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.qh-imgs a{display:block;border:1px solid #d9c9cc;background:#fff;overflow:hidden}
+.qh-imgs a:nth-child(2){margin-top:48px}
+.qh-imgs img{width:100%;height:auto;aspect-ratio:1355/1160;object-fit:cover;display:block;transition:transform .35s ease}
+.qh-imgs a:hover img{transform:scale(1.04)}
+@media(max-width:900px){.qh-imgs{grid-template-columns:1fr;gap:14px}.qh-imgs a:nth-child(2){margin-top:0}}

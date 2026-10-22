@@ -112,10 +112,18 @@ $q_points = array(
 			<a class="btn btn-line" href="<?php echo esc_url( pcs_page_url( 'quality-hygiene' ) ); ?>#visit">Visit the counter</a>
 		</div>
 	</div>
-	<div class="qh-pics">
-		<?php if ( $q_a ) { echo get_the_post_thumbnail( $q_a, 'large', array( 'class' => 'qh-big', 'loading' => 'lazy' ) ); } ?>
-		<?php if ( $q_b ) { echo get_the_post_thumbnail( $q_b, 'medium_large', array( 'class' => 'qh-small', 'loading' => 'lazy' ) ); } ?>
-		<span class="qh-tag"><?php echo pcs_icon( 'snow' ); // phpcs:ignore ?> Fresh · Chilled · Hygienic</span>
+	<div class="qh-imgs">
+		<?php foreach ( array( 'chicken' => $q_a, 'mutton' => $q_b ) as $slug => $fallback ) :
+			$img  = pcs_opt( 'qh_img_' . $slug );
+			$term = get_term_by( 'slug', $slug, 'product_cat' );
+			if ( ! $img && $fallback ) {
+				$img = get_the_post_thumbnail_url( $fallback, 'large' );
+			}
+			if ( ! $img ) {
+				continue;
+			} ?>
+		<a href="<?php echo esc_url( $term ? get_term_link( $term ) : wc_get_page_permalink( 'shop' ) ); ?>"><img src="<?php echo esc_url( $img ); ?>" alt="<?php echo esc_attr( ucfirst( $slug ) ); ?> from House of Cutts" loading="lazy" width="1355" height="1160"></a>
+		<?php endforeach; ?>
 	</div>
 </div></section>
 
