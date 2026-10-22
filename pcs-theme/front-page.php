@@ -59,6 +59,7 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 <section class="offer"><div class="wrap"><?php echo esc_html( $offer ); ?></div></section>
 <?php endif; ?>
 
+<?php $promos = pcs_lines( 'promos' ); $ci = 0; ?>
 <?php foreach ( $cats as $t ) : $list = array_slice( $by_cat[ $t->slug ] ?? array(), 0, 12 ); if ( ! $list ) { continue; } ?>
 <section class="section"><div class="wrap">
 	<div class="section-head"><h2>Best of <?php echo esc_html( $t->name ); ?></h2><a href="<?php echo esc_url( get_term_link( $t ) ); ?>">See all <?php echo esc_html( $t->name ); ?></a></div>
@@ -67,6 +68,16 @@ foreach ( array( 'chicken' => 'Chicken', 'mutton' => 'Mutton' ) as $slug => $lab
 		<button type="button" class="sl-btn sl-prev" aria-label="Previous">‹</button><button type="button" class="sl-btn sl-next" aria-label="Next">›</button>
 	</div>
 </div></section>
+<?php if ( 0 === $ci && $promos && count( $cats ) > 1 ) : ?>
+<section class="promo-strip"><div class="wrap">
+	<div class="slider promo" data-slider data-auto="4500">
+		<div class="hero" aria-label="Offers">
+			<?php foreach ( $promos as $pr ) : ?><a class="slide" href="<?php echo esc_url( 0 === strpos( $pr[2] ?? '', 'http' ) ? $pr[2] : home_url( $pr[2] ?? '/' ) ); ?>"><img src="<?php echo esc_url( $pr[0] ); ?>" alt="<?php echo esc_attr( $pr[1] ?? '' ); ?>" loading="lazy" width="1200" height="100"></a><?php endforeach; ?>
+		</div>
+		<?php if ( count( $promos ) > 1 ) : ?><button type="button" class="sl-btn sl-prev" aria-label="Previous">&lsaquo;</button><button type="button" class="sl-btn sl-next" aria-label="Next">&rsaquo;</button><?php endif; ?>
+	</div>
+</div></section>
+<?php endif; $ci++; ?>
 <?php endforeach; ?>
 
 <?php if ( $banners ) : ?>

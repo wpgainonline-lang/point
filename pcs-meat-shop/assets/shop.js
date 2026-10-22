@@ -320,6 +320,17 @@
 			var b = $('.sl-' + d, sl);
 			if (b) { b.addEventListener('click', function () { track.scrollBy({ left: (d === 'next' ? 1 : -1) * track.clientWidth }); }); }
 		});
+		var every = parseInt(sl.getAttribute('data-auto'), 10);
+		if (every && track.children.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			var hold = false;
+			setInterval(function () {
+				if (hold || document.hidden) { return; }
+				if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) { track.scrollTo({ left: 0 }); } else { track.scrollBy({ left: track.clientWidth }); }
+			}, every);
+			['mouseenter', 'focusin', 'touchstart'].forEach(function (ev) { sl.addEventListener(ev, function () { hold = true; }, { passive: true }); });
+			['mouseleave', 'focusout'].forEach(function (ev) { sl.addEventListener(ev, function () { hold = false; }); });
+			sl.addEventListener('touchend', function () { setTimeout(function () { hold = false; }, 5000); }, { passive: true });
+		}
 	});
 	$$('[data-car]').forEach(function (c) {
 		var t = $('.car-track', c), prev = $('.sl-prev', c), next = $('.sl-next', c);
