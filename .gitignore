@@ -1,0 +1,16 @@
+# WordPress core & uploads are not part of this repo — only the custom theme is.
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/index.php
+/xmlrpc.php
+/license.txt
+/readme.html
+/wp-content/plugins/
+/wp-content/uploads/
+/wp-content/database/
+/wp-content/db.php
+/wp-content/upgrade/
+/wp-content/themes/twenty*
+/wp-content/themes/index.php
+/wp-content/index.php
