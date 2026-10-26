@@ -6,7 +6,8 @@
 /xmlrpc.php
 /license.txt
 /readme.html
-/wp-content/plugins/
+/wp-content/plugins/*
+!/wp-content/plugins/islamia-mcp-connector/
 /wp-content/uploads/
 /wp-content/database/
 /wp-content/db.php
